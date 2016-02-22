@@ -10,6 +10,11 @@ public class GapFunction {
 	}
 
 	public int calcPenalty(boolean extend) {
-		return 0;
+		if(extend) {
+			return gapExtend;
+		}
+		else {
+			return gapOpen;
+		}
 	}
 }

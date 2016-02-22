@@ -11,6 +11,13 @@ public class SequencePair {
 		this.sequenceB = sequenceB; 
 	}
 	
+	public SequencePair(String sequenceA, String sequenceB, String nameA, String nameB) {
+		this.sequenceA = sequenceA;
+		this.sequenceB = sequenceB;
+		this.nameA = nameA;
+		this.nameB = nameB;
+	}
+
 	public String getSequenceA() {
 		return sequenceA;
 	}

@@ -2,8 +2,8 @@ package alignment;
 
 public class GotohLocal extends Local{
 
-	public GotohLocal(SequencePair[] sequences, GapFunction gapFunction, ScoringMatrix scoringMatrix, AIDmatrices aidmatrices) {
-		super(sequences, gapFunction, scoringMatrix, aidmatrices);
+	public GotohLocal(SequencePair sequence, GapFunction gapFunction, ScoringMatrix scoringMatrix) {
+		super(sequence, gapFunction, scoringMatrix);
 	}
 
 	public void fillMatrix() {

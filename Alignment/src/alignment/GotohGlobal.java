@@ -2,8 +2,8 @@ package alignment;
 
 public class GotohGlobal extends Global{
 
-	public GotohGlobal(SequencePair[] sequences, GapFunction gapFunction, ScoringMatrix scoringMatrix, AIDmatrices aidmatrices) {
-		super(sequences, gapFunction, scoringMatrix, aidmatrices);
+	public GotohGlobal(SequencePair sequence, GapFunction gapFunction, ScoringMatrix scoringMatrix) {
+		super(sequence, gapFunction, scoringMatrix);
 	}
 
 	public void fillMatrix() {

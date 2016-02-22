@@ -2,8 +2,8 @@ package alignment;
 
 public class GotohFreeshift extends Freeshift{
 
-	public GotohFreeshift(SequencePair[] sequences, GapFunction gapFunction, ScoringMatrix scoringMatrix, AIDmatrices aidmatrices) {
-		super(sequences, gapFunction, scoringMatrix,aidmatrices);
+	public GotohFreeshift(SequencePair sequence, GapFunction gapFunction, ScoringMatrix scoringMatrix) {
+		super(sequence, gapFunction, scoringMatrix);
 	}
 
 	public void fillMatrix() {
