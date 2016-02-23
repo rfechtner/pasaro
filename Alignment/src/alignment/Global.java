@@ -54,7 +54,6 @@ public class Global extends Alignment{
 				b = getSequence().getSequenceB()[x] + b;
 			}
 		}
-		System.out.println(a);
-		System.out.println(b);
+		
 	}
 }

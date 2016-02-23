@@ -1,7 +1,7 @@
 package alignment;
 
 public abstract class Alignment {
-	protected SequencePair sequence;
+	private SequencePair sequence;
 	private SequencePair finalAlignment;
 	private int finalScore;
 	private GapFunction gapFunction;

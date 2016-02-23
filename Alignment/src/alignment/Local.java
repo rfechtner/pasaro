@@ -41,14 +41,17 @@ public class Local extends Alignment{
 			}
 		}
 		System.out.println(maxScore);
-		System.out.println(checkScore(lengthX,lengthY));
+//		System.out.println(checkScore(lengthX,lengthY));
 		backtrack(i,j);
 //		printMatrix();
+
 	}
 	
-	public void backtrack(int i, int j) {
+	public void backtrack(int i, int j) { 
+		char[] seqA = getSequence().getSequenceA();
 		String a = "";
 		String b = "";
+		getSequence().setScore(getaMatrix()[i][j]);
 		if(i != getSequence().getSequenceA().length) {
 			for(int x = i; x < getSequence().getSequenceA().length; x++) {
 				a += getSequence().getSequenceA()[x];
@@ -89,7 +92,7 @@ public class Local extends Alignment{
 				b = getSequence().getSequenceB()[x] + b;
 			}
 		}
-		System.out.println(a);
-		System.out.println(b);
+		getSequence().setSequenceA(a.toCharArray());
+		getSequence().setSequenceB(b.toCharArray());
 	}
 }

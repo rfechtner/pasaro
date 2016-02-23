@@ -20,6 +20,14 @@ public class SequencePair {
 		this.nameB = nameB;
 	}
 
+	public void setSequenceA(char[] sequenceA) {
+		this.sequenceA = sequenceA;
+	}
+
+	public void setSequenceB(char[] sequenceB) {
+		this.sequenceB = sequenceB;
+	}
+
 	public char[] getSequenceA() {
 		return sequenceA;
 	}
@@ -40,6 +48,14 @@ public class SequencePair {
 	public String toString() {
 		return "SequencePair [\t" + nameA + ":" + String.copyValueOf(sequenceA) + "\n\t\t" + nameB +":"
 				+ String.copyValueOf(sequenceB) + "]";
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 	
 	
