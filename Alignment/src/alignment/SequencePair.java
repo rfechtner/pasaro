@@ -1,28 +1,30 @@
 package alignment;
 
 public class SequencePair {
-	private String sequenceA;
-	private String sequenceB;
+	private char[] sequenceA;
+	private char[] sequenceB;
 	private String nameA;
 	private String nameB;
+	private int score;
+	boolean alignment;
 	
 	public SequencePair(String sequenceA, String sequenceB) {
-		this.sequenceA = sequenceA;
-		this.sequenceB = sequenceB; 
+		this.sequenceA = sequenceA.toCharArray();
+		this.sequenceB = sequenceB.toCharArray(); 
 	}
 	
 	public SequencePair(String sequenceA, String sequenceB, String nameA, String nameB) {
-		this.sequenceA = sequenceA;
-		this.sequenceB = sequenceB;
+		this.sequenceA = sequenceA.toCharArray();
+		this.sequenceB = sequenceB.toCharArray();
 		this.nameA = nameA;
 		this.nameB = nameB;
 	}
 
-	public String getSequenceA() {
+	public char[] getSequenceA() {
 		return sequenceA;
 	}
 	
-	public String getSequenceB() {
+	public char[] getSequenceB() {
 		return sequenceB;
 	}
 	
