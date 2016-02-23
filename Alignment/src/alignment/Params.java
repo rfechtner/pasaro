@@ -80,7 +80,7 @@ public class Params {
 							case "pairs": params.put("pairs",par); break;
 							case "seqlib": params.put("seqlib", par); break;
 							case "mode": params.put("mode", par); break;
-							case "nw": params.put("mw", "true"); break;
+							case "nw": params.put("nw", "true"); break;
 							case "format": params.put("format", par); break;
 						}
 					}

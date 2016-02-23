@@ -60,15 +60,15 @@ public class ScoringMatrix {
 		return scoringMatrix;
 	}
 	
-	public int getScore(char a, char b) {
-		if(a == b) {
-			return 3;
-		}else {
-			return -2;
-		}
-	}
+	//public int getScore(char a, char b) {
+	//	if(a == b) {
+	//		return 3;
+	//	}else {
+	//		return -2;
+	//	}
+	//}
 	
-	public int getScoreNew(char a, char b){
+	public int getScore(char a, char b){
 		return scoringMatrix[(int) a - 65][(int) b - 65];
 	}
 

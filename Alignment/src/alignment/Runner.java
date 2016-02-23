@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Runner {
 	public static void main(String[] args) {
 		Params p = new Params(Params.getParams(args));
-		System.out.println(p.toString());
+		
 		
 		ScoringMatrix sm = new ScoringMatrix(p.getM());
 		GapFunction gf = new GapFunction(p.getGo(), p.getGe());
@@ -33,5 +33,7 @@ public class Runner {
 			//System.out.println("\t Alignment: " + al.getFinalAlignment().toString());
 			//System.out.println("\t Score: " + al.getFinalScore());
 		}
+		
+		System.out.println(p.toString());
 	}
 }
