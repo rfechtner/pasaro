@@ -41,8 +41,9 @@ public class Local extends Alignment{
 			}
 		}
 		System.out.println(maxScore);
+		System.out.println(checkScore(lengthX,lengthY));
 		backtrack(i,j);
-		printMatrix();
+//		printMatrix();
 	}
 	
 	public void backtrack(int i, int j) {
