@@ -1,4 +1,4 @@
-package alignment;
+package alignmentUtils;
 
 public class GapFunction {
 	private int gapOpen;

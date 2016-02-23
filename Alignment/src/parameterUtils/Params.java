@@ -1,6 +1,9 @@
-package alignment;
+package parameterUtils;
 
 import java.util.HashMap;
+
+import enums.AlignmentFormat;
+import enums.AlignmentType;
 
 public class Params {
 		private int go;

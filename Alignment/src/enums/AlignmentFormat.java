@@ -1,4 +1,4 @@
-package alignment;
+package enums;
 
 public enum AlignmentFormat {
 	scores, ali, html

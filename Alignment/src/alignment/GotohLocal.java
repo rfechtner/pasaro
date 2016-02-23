@@ -1,5 +1,9 @@
 package alignment;
 
+import alignmentUtils.GapFunction;
+import alignmentUtils.ScoringMatrix;
+import alignmentUtils.SequencePair;
+
 public class GotohLocal extends Local{
 
 	public GotohLocal(SequencePair sequence, GapFunction gapFunction, ScoringMatrix scoringMatrix) {
@@ -11,6 +15,6 @@ public class GotohLocal extends Local{
 	}
 
 	public void backtrack() {
-	
+		
 	}
 }

@@ -1,4 +1,4 @@
-package alignment;
+package alignmentUtils;
 
 public class SequencePair {
 	private char[] sequenceA;
@@ -18,14 +18,6 @@ public class SequencePair {
 		this.sequenceB = sequenceB.toCharArray();
 		this.nameA = nameA;
 		this.nameB = nameB;
-	}
-
-	public void setSequenceA(char[] sequenceA) {
-		this.sequenceA = sequenceA;
-	}
-
-	public void setSequenceB(char[] sequenceB) {
-		this.sequenceB = sequenceB;
 	}
 
 	public char[] getSequenceA() {
@@ -50,12 +42,19 @@ public class SequencePair {
 				+ String.copyValueOf(sequenceB) + "]";
 	}
 
-	public int getScore() {
-		return score;
+	public void setScore(int i) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public void setScore(int score) {
-		this.score = score;
+	public void setSequenceA(char[] charArray) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setSequenceB(char[] charArray) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

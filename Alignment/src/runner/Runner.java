@@ -1,6 +1,19 @@
-package alignment;
+package runner;
 
 import java.util.ArrayList;
+
+import alignment.Alignment;
+import alignment.Freeshift;
+import alignment.Global;
+import alignment.GotohFreeshift;
+import alignment.GotohGlobal;
+import alignment.GotohLocal;
+import alignment.Local;
+import alignmentUtils.GapFunction;
+import alignmentUtils.ScoringMatrix;
+import alignmentUtils.SequencePair;
+import alignmentUtils.SequenceParser;
+import parameterUtils.Params;
 
 public class Runner {
 	public static void main(String[] args) {

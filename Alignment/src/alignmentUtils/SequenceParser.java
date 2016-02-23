@@ -1,4 +1,4 @@
-package alignment;
+package alignmentUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
