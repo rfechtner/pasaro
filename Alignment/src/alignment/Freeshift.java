@@ -51,11 +51,11 @@ public class Freeshift extends Alignment{
 			}
 		}
 		while(i != 0 && j != 0) {
-			if(aMatrix[i][j] == aMatrix[i-1][j] + gapFunction.calcPenalty(false)){
+			if(aMatrix[i][j] == aMatrix[i-1][j] + gapFunction.calcPenalty(1)){
 				i = i-1; 
 				a = sequence.getSequenceA()[i] + a;
 				b = "-" + b;
-			}else if(aMatrix[i][j] == aMatrix[i][j-1] + gapFunction.calcPenalty(false)) {
+			}else if(aMatrix[i][j] == aMatrix[i][j-1] + gapFunction.calcPenalty(1)) {
 				j = j-1;
 				a = "-" + a;
 				b = sequence.getSequenceB()[j] + b;

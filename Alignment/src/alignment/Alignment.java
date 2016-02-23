@@ -28,8 +28,8 @@ public abstract class Alignment {
 	}
 	
 	public float checkScore(int i, int j) {
-		float gap1 = checkScore(i, j) + gapFunction.calcPenalty(false);
-		float gap2 = checkScore(i, j) + gapFunction.calcPenalty(false);
+		float gap1 = checkScore(i, j) + gapFunction.calcPenalty(1);
+		float gap2 = checkScore(i, j) + gapFunction.calcPenalty(1);
 		float match = checkScore(i, j) + scoringMatrix.getScore(sequence.getSequenceA()[i-1], sequence.getSequenceB()[j-1]);
 		return Math.max(match, Math.max(gap1, gap2));
 	}
@@ -47,11 +47,22 @@ public abstract class Alignment {
 		aMatrix = new float[sequence.getSequenceA().length + 1][sequence.getSequenceB().length + 1];
 	}
 
+	public void initID() {
+		iMatrix = new float[sequence.getSequenceA().length + 1][sequence.getSequenceB().length + 1];
+		dMatrix = new float[sequence.getSequenceA().length + 1][sequence.getSequenceB().length + 1];
+		for (int i = 1; i < iMatrix.length; i++) {
+			iMatrix[i][0] = Integer.MIN_VALUE;
+		}
+		for (int j = 1; j < dMatrix[0].length; j++) {
+			dMatrix[0][j] = Integer.MIN_VALUE;
+		}
+	}
+	
 	public void fillMatrix() { // weil ja für global und freeshift gleich, dann bei goto und lokal überschreiben
 		for (int i = 1; i < aMatrix.length; i++) {
 			for (int j = 1; j < aMatrix[0].length; j++) {
-				float gap1 = aMatrix[i][j-1] + gapFunction.calcPenalty(false);
-				float gap2 = aMatrix[i-1][j] + gapFunction.calcPenalty(false);
+				float gap1 = aMatrix[i][j-1] + gapFunction.calcPenalty(1);
+				float gap2 = aMatrix[i-1][j] + gapFunction.calcPenalty(1);
 				float match = aMatrix[i-1][j-1] + scoringMatrix.getScore(sequence.getSequenceA()[i-1], sequence.getSequenceB()[j-1]);
 				aMatrix[i][j] = Math.max(match, Math.max(gap1, gap2));
 			}

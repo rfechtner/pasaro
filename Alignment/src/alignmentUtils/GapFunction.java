@@ -9,12 +9,8 @@ public class GapFunction {
 		this.gapExtend = gapExtend;
 	}
 
-	public float calcPenalty(boolean extend) {
-		if(extend) {
-			return gapExtend;
-		}
-		else {
-			return gapOpen;
+	public float calcPenalty(int extend) {
+			return (gapExtend * extend) + gapOpen;
 		}
 	}
-}
+

@@ -15,16 +15,17 @@ public class Global extends Alignment{
 		super.initMatrix();
 		aMatrix[0][0] = 0;
 		for (int i = 1; i < aMatrix.length; i++) {
-			aMatrix[i][0] = aMatrix[i-1][0] + gapFunction.calcPenalty(false); 
+			aMatrix[i][0] = gapFunction.calcPenalty(i); 
 		}
 		for (int i = 1; i < aMatrix[0].length; i++) {
-			aMatrix[0][i] = aMatrix[0][i-1] + gapFunction.calcPenalty(false);
+			aMatrix[0][i] = gapFunction.calcPenalty(i);
 		}
 	}	
 	
 	public void make() {
 		super.make();
 		backtrack(aMatrix.length - 1, aMatrix[0].length - 1);
+		System.out.println(aMatrix[aMatrix.length - 1][aMatrix[0].length - 1]);
 	}
 	
 	public void backtrack(int i, int j) {
@@ -32,11 +33,11 @@ public class Global extends Alignment{
 		String b = "";
 		float finalScore = aMatrix[i][j];	
 		while(i != 0 && j != 0) {
-			if(aMatrix[i][j] == aMatrix[i-1][j] + gapFunction.calcPenalty(false)){
+			if(aMatrix[i][j] == aMatrix[i-1][j] + gapFunction.calcPenalty(1)){
 				i = i-1; 
 				a = sequence.getSequenceA()[i] + a;
 				b = "-" + b;
-			}else if(aMatrix[i][j] == aMatrix[i][j-1] + gapFunction.calcPenalty(false)) {
+			}else if(aMatrix[i][j] == aMatrix[i][j-1] + gapFunction.calcPenalty(1)) {
 				j = j-1;
 				a = "-" + a;
 				b = sequence.getSequenceB()[j] + b;
