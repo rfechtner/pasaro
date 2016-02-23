@@ -16,16 +16,34 @@ public class Output {
 	}
 	
 	private static void genAliOutput(SequencePair alignment){
-		System.out.println(alignment.getNameA() + " " + alignment.getNameB() + " " + alignment.getScore());
+		System.out.println(">" + alignment.getNameA() + " " + alignment.getNameB() + " " + alignment.getScore());
 		System.out.println(alignment.getNameA() + ": " + String.copyValueOf(alignment.getSequenceA()));
 		System.out.println(alignment.getNameB() + ": " + String.copyValueOf(alignment.getSequenceB()));
 	}
 
 	private static void genHtmlOutput(SequencePair alignment){
+		String chars = "";
+		
+		for(int i = 0; i < alignment.getSequenceA().length; i++){
+			String mat = "";
+			if (alignment.getSequenceA()[i] == alignment.getSequenceB()[i]) { mat = "mat"; }
+			else if (alignment.getSequenceA()[i] != '-' && alignment.getSequenceB()[i] != '-') { mat = "sim"; }
+			
+			chars += 	"\t<div class='char " + mat + "'> \n" +
+							"\t\t<div class='SeqA'>" + alignment.getSequenceA()[i] + "</div>\n"+
+							"\t\t<div class='SeqB'>" + alignment.getSequenceB()[i] + "</div>\n"+
+						"\t</div>\n";
+		}
+		
 		String html = 	"<div class='alignment'>\n" +
-							"<div class='information'>\n" +
-								"\n" +
-							"</div>\n" +
+							"\t<div class='information'>\n" +
+								alignment.getScore() +
+							"\t</div>\n" +
+							"\t<div class='sequences '>\n" +
+							chars +
+							"\t</div>\n" +
 						"</div>\n";
+		
+		System.out.println(html);
 	}
 }

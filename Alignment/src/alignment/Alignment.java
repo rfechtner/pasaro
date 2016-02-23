@@ -61,4 +61,8 @@ public abstract class Alignment {
 	public void backtrack(int i, int j) {
 
 	}
+	
+	public SequencePair getFinalAlignment(){
+		return finalAlignment;
+	}
 }

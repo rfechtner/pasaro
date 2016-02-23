@@ -10,6 +10,7 @@ import alignment.GotohGlobal;
 import alignment.GotohLocal;
 import alignment.Local;
 import alignmentUtils.GapFunction;
+import alignmentUtils.Output;
 import alignmentUtils.ScoringMatrix;
 import alignmentUtils.SequencePair;
 import alignmentUtils.SequenceParser;
@@ -43,11 +44,12 @@ public class Runner {
 			}
 			
 			al.make();
-			
 			alignments.add(al);
 		}
 		
-		
+		for (Alignment al : alignments){
+			Output.genOutput(al.getFinalAlignment(), p.getFormat());
+		}
 		
 		System.out.println(p.toString());
 	}
