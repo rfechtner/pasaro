@@ -41,6 +41,21 @@ public class SequencePair {
 		return "SequencePair [\t" + nameA + ":" + String.copyValueOf(sequenceA) + "\n\t\t" + nameB +":"
 				+ String.copyValueOf(sequenceB) + "]";
 	}
+
+	public void setScore(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setSequenceA(char[] charArray) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setSequenceB(char[] charArray) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }
