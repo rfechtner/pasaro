@@ -7,13 +7,14 @@ public class Runner {
 		Params p = new Params(Params.getParams(args));
 		System.out.println(p.toString());
 		
+		ScoringMatrix sm = new ScoringMatrix(p.getM());
 		GapFunction gf = new GapFunction(p.getGo(), p.getGe());
 		
 		ArrayList<SequencePair> sequencePairs = SequenceParser.parseSeq(p.getSeqlib(), p.getPairs());
 		
-		for ( SequencePair sp : sequencePairs ){
-			//System.out.println(sp.toString());
-		}
+		//for ( SequencePair sp : sequencePairs ){
+		//	System.out.println(sp.toString());
+		//}
 	}
 	
 	

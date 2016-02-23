@@ -38,8 +38,8 @@ public class SequencePair {
 
 	@Override
 	public String toString() {
-		return "SequencePair [\t" + nameA + ":" + sequenceA + "\n\t\t" + nameB +":"
-				+ sequenceB + "]";
+		return "SequencePair [\t" + nameA + ":" + String.copyValueOf(sequenceA) + "\n\t\t" + nameB +":"
+				+ String.copyValueOf(sequenceB) + "]";
 	}
 	
 	
