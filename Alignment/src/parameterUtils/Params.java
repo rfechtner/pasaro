@@ -6,8 +6,8 @@ import enums.AlignmentFormat;
 import enums.AlignmentType;
 
 public class Params {
-		private int go;
-		private int ge;
+		private float go;
+		private float ge;
 		private String dpmatrices;
 		private boolean check;
 		private String pairs;
@@ -20,8 +20,8 @@ public class Params {
 		public Params(HashMap<String, String> params){
 
 			try {
-				if (params.get("go") != null) { go = Integer.parseInt(params.get("go")); } else { go = -12; }
-				if (params.get("ge") != null) { ge = Integer.parseInt(params.get("ge")); } else { ge = -1; }
+				if (params.get("go") != null) { go = Float.parseFloat(params.get("go")); } else { go = -12; }
+				if (params.get("ge") != null) { ge = Float.parseFloat(params.get("ge")); } else { ge = -1; }
 				
 				if (params.get("dpmatrices") != null) dpmatrices = params.get("dpmatrices");
 				
@@ -93,11 +93,11 @@ public class Params {
 			return params;
 		}
 
-		public int getGo() {
+		public float getGo() {
 			return go;
 		}
 
-		public int getGe() {
+		public float getGe() {
 			return ge;
 		}
 

@@ -5,7 +5,7 @@ public class SequencePair {
 	private char[] sequenceB;
 	private String nameA;
 	private String nameB;
-	private int score;
+	private float score;
 	boolean alignment;
 	
 	public SequencePair(String sequenceA, String sequenceB) {
@@ -57,5 +57,8 @@ public class SequencePair {
 		
 	}
 	
+	public float getScore(){
+		return score;
+	}
 	
 }
