@@ -28,7 +28,6 @@ public class Freeshift extends Alignment{
 			}
 		}
 		backtrack(i,j);
-		printMatrix();
 	}
 	
 	public void backtrack(int i, int j) {
@@ -67,7 +66,8 @@ public class Freeshift extends Alignment{
 				a = getSequence().getSequenceA()[x] + a;
 				b = "-" + b;
 			}
-		}else if (j != 0){
+		}
+		if (j != 0){
 			for(int x = j-1; x >= 0; x--) {
 				a = "-" + a;
 				b = getSequence().getSequenceB()[x] + b;

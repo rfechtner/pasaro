@@ -41,13 +41,11 @@ public class Local extends Alignment{
 			}
 		}
 		backtrack(i,j);
-		printMatrix();
 	}
 	
 	public void backtrack(int i, int j) {
 		String a = "";
 		String b = "";
-		System.out.println(i + " " + j);
 		if(i != getSequence().getSequenceA().length) {
 			for(int x = i; x < getSequence().getSequenceA().length; x++) {
 				a += getSequence().getSequenceA()[x];
@@ -81,7 +79,8 @@ public class Local extends Alignment{
 				a = getSequence().getSequenceA()[x] + a;
 				b = "-" + b;
 			}
-		}else if (j != 0){
+		}
+		if (j != 0){
 			for(int x = j-1; x >= 0; x--) {
 				a = "-" + a;
 				b = getSequence().getSequenceB()[x] + b;
