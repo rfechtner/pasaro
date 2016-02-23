@@ -5,22 +5,31 @@ public class Freeshift extends Alignment{
 	public Freeshift(SequencePair sequence, GapFunction gapFunction, ScoringMatrix scoringMatrix) {
 		super(sequence, gapFunction, scoringMatrix);
 	}
-
-//	public void initMatrix() {
-//		for (int i = 0; i < getAidmatrices().getaMatrix().length; i++) {
-//			getAidmatrices().getaMatrix()[i][0] = 0;
-//		}
-//		for (int i = 0; i < getAidmatrices().getaMatrix()[0].length; i++) {
-//			getAidmatrices().getaMatrix()[0][i] = 0;
-//		}
-//	}
-
-	public void backtrack() {
-		for (int j = 0; j < getaMatrix()[0].length; j++) {
-			for (int i = 0; i < getaMatrix().length; i++) {
-				System.out.print(getaMatrix()[i][j] + " ");
+	
+	public void make() {
+		super.make();
+		int lengthX = getaMatrix().length - 1;
+		int lengthY = getaMatrix()[0].length - 1; 
+		int i = lengthX;
+		int j = lengthY;
+		int maxScore = getaMatrix()[i][j]; 
+		for (int x = lengthX - 1; x > 0; x--) {
+			if(getaMatrix()[x][lengthY] > maxScore) {
+				maxScore = getaMatrix()[x][lengthY];
+				i = x;
+				j = lengthY;
 			}
-			System.out.print("\n");
 		}
+		for (int x = lengthY - 1; x > 0; x--) {
+			if(getaMatrix()[lengthX][x] > maxScore) {
+				maxScore = getaMatrix()[lengthX][x];
+				i = lengthX;
+				j = x;
+			}
+		}
+		
+		
+		backtrack(i,j);
+		printMatrix();
 	}
 }
