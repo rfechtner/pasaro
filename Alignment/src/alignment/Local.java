@@ -42,7 +42,7 @@ public class Local extends Alignment{
 		}
 		System.out.println(maxScore);
 		backtrack(i,j);
-		printMatrix();
+		//printMatrix();
 	}
 	
 	public void backtrack(int i, int j) {
