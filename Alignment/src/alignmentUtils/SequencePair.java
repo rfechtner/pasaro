@@ -1,4 +1,4 @@
-package alignment;
+package alignmentUtils;
 
 public class SequencePair {
 	private char[] sequenceA;

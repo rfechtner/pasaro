@@ -1,4 +1,10 @@
-package alignment;
+package runner;
+
+import alignment.Alignment;
+import alignment.Local;
+import alignmentUtils.GapFunction;
+import alignmentUtils.ScoringMatrix;
+import alignmentUtils.SequencePair;
 
 public class Tester {
 	public static void main(String[] args) {

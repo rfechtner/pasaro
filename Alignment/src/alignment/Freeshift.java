@@ -1,5 +1,9 @@
 package alignment;
 
+import alignmentUtils.GapFunction;
+import alignmentUtils.ScoringMatrix;
+import alignmentUtils.SequencePair;
+
 public class Freeshift extends Alignment{
 
 	public Freeshift(SequencePair sequence, GapFunction gapFunction, ScoringMatrix scoringMatrix) {

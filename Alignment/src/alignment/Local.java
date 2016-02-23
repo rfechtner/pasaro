@@ -1,5 +1,9 @@
 package alignment;
 
+import alignmentUtils.GapFunction;
+import alignmentUtils.ScoringMatrix;
+import alignmentUtils.SequencePair;
+
 public class Local extends Alignment{
 
 	public Local(SequencePair sequence, GapFunction gapFunction, ScoringMatrix scoringMatrix) {

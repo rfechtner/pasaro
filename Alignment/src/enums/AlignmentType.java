@@ -1,4 +1,4 @@
-package alignment;
+package enums;
 
 public enum AlignmentType {
 	local, global, freeshift

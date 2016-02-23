@@ -1,5 +1,9 @@
 package alignment;
 
+import alignmentUtils.GapFunction;
+import alignmentUtils.ScoringMatrix;
+import alignmentUtils.SequencePair;
+
 public class Global extends Alignment{
 
 	

@@ -1,4 +1,4 @@
-package alignment;
+package parameterUtils;
 
 @SuppressWarnings("serial")
 public class ParamException extends Exception{

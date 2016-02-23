@@ -1,4 +1,4 @@
-package alignment;
+package alignmentUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
