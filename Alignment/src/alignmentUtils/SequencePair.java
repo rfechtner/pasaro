@@ -5,19 +5,19 @@ public class SequencePair {
 	private char[] sequenceB;
 	private String nameA;
 	private String nameB;
-	private int score;
-	boolean alignment;
+	private float score;
 	
 	public SequencePair(String sequenceA, String sequenceB) {
 		this.sequenceA = sequenceA.toCharArray();
 		this.sequenceB = sequenceB.toCharArray(); 
 	}
 	
-	public SequencePair(String sequenceA, String sequenceB, String nameA, String nameB) {
+	public SequencePair(String sequenceA, String sequenceB, String nameA, String nameB, float score) {
 		this.sequenceA = sequenceA.toCharArray();
 		this.sequenceB = sequenceB.toCharArray();
 		this.nameA = nameA;
 		this.nameB = nameB;
+		this.score = score;
 	}
 
 	public char[] getSequenceA() {

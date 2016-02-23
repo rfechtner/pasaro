@@ -16,7 +16,7 @@ public class Freeshift extends Alignment{
 		int lengthY = aMatrix[0].length - 1; 
 		int i = lengthX;
 		int j = lengthY;
-		int maxScore = aMatrix[i][j]; 
+		float maxScore = aMatrix[i][j]; 
 		for (int x = lengthX; x > 0; x--) {
 			if(aMatrix[x][lengthY] > maxScore) {
 				maxScore = aMatrix[x][lengthY];
@@ -37,6 +37,7 @@ public class Freeshift extends Alignment{
 	public void backtrack(int i, int j) {
 		String a = "";
 		String b = "";
+		float finalScore = aMatrix[i][j];	
 		if(i != sequence.getSequenceA().length) {
 			for(int x = i; x < sequence.getSequenceA().length; x++) {
 				a += sequence.getSequenceA()[x];
@@ -77,7 +78,7 @@ public class Freeshift extends Alignment{
 				b = sequence.getSequenceB()[x] + b;
 			}
 		}
-		System.out.println(a);
-		System.out.println(b);
+		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), finalScore);
+		finalAlignment = out;
 	}
 }
