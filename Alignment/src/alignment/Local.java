@@ -30,27 +30,36 @@ public class Local extends Alignment{
 		int lengthY = getaMatrix()[0].length - 1; 
 		int i = lengthX;
 		int j = lengthY;
-		int maxScore = getaMatrix()[i][j]; 
-		for (int x = lengthX - 1; x > 0; x--) {
-			if(getaMatrix()[x][lengthY] > maxScore) {
-				maxScore = getaMatrix()[x][lengthY];
-				i = x;
-				j = lengthY;
-			}
-		}
-		for (int x = lengthY - 1; x > 0; x--) {
-			if(getaMatrix()[lengthX][x] > maxScore) {
-				maxScore = getaMatrix()[lengthX][x];
-				i = lengthX;
-				j = x;
+		int maxScore = getaMatrix()[0][0]; 
+		for (int x = 0; x < lengthX-1; x++) {
+			for (int y = 0; y < lengthY-1; y++) {
+				if(getaMatrix()[x][y] > maxScore) {
+					maxScore = getaMatrix()[x][y];
+					i = x;
+					j = y;
+				}
 			}
 		}
 		backtrack(i,j);
+		printMatrix();
 	}
 	
 	public void backtrack(int i, int j) {
 		String a = "";
 		String b = "";
+		System.out.println(i + " " + j);
+		if(i != getSequence().getSequenceA().length) {
+			for(int x = i; x < getSequence().getSequenceA().length; x++) {
+				a += getSequence().getSequenceA()[x];
+				b += "-";
+			}
+		}
+		if(j != getSequence().getSequenceB().length) {
+			for(int x = j; x < getSequence().getSequenceB().length; x++) {
+				a += "-";
+				b += getSequence().getSequenceB()[x];
+			}
+		}
 		while(getaMatrix()[i][j] != 0) {
 			if(getaMatrix()[i][j] == getaMatrix()[i-1][j] + getGapFunction().calcPenalty(false)){
 				i = i-1; 

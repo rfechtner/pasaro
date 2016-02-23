@@ -97,18 +97,15 @@ public abstract class Alignment {
 				i = i-1; 
 				a = getSequence().getSequenceA()[i] + a;
 				b = "-" + b;
-				System.out.println("gapb");
 			}else if(getaMatrix()[i][j] == getaMatrix()[i][j-1] + getGapFunction().calcPenalty(false)) {
 				j = j-1;
 				a = "-" + a;
 				b = getSequence().getSequenceB()[j] + b;
-				System.out.println("gapa");
 			}else {
 				i = i-1;
 				j = j-1;
 				a = getSequence().getSequenceA()[i] + a;
 				b = getSequence().getSequenceB()[j] + b;
-				System.out.println("match");
 			}
 		}
 		if(i != 0) {
