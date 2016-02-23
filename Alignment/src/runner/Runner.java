@@ -24,6 +24,8 @@ public class Runner {
 		GapFunction gf = new GapFunction(p.getGo(), p.getGe());
 		ArrayList<SequencePair> sequencePairs = SequenceParser.parseSeq(p.getSeqlib(), p.getPairs());
 		
+		ArrayList<Alignment> alignments = new ArrayList<Alignment>();
+		
 		for ( SequencePair sp : sequencePairs ){
 			Alignment al = null;
 			if(p.isNw()) {
@@ -42,10 +44,10 @@ public class Runner {
 			
 			al.make();
 			
-			//System.out.println("Alignment für " + sp.toString());
-			//System.out.println("\t Alignment: " + al.getFinalAlignment().toString());
-			//System.out.println("\t Score: " + al.getFinalScore());
+			alignments.add(al);
 		}
+		
+		
 		
 		System.out.println(p.toString());
 	}
