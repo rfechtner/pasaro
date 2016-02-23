@@ -33,4 +33,12 @@ public class SequencePair {
 	public String getNameB() {
 		return nameB;
 	}
+
+	@Override
+	public String toString() {
+		return "SequencePair [\t" + nameA + ":" + sequenceA + "\n\t\t" + nameB +":"
+				+ sequenceB + "]";
+	}
+	
+	
 }
