@@ -13,18 +13,18 @@ public class Local extends Alignment{
 	public void fillMatrix() {
 		for (int i = 1; i < aMatrix.length; i++) {
 			for (int j = 1; j < aMatrix[0].length; j++) {
-				int gap1 = aMatrix[i][j-1] + gapFunction.calcPenalty(false);
-				int gap2 = aMatrix[i-1][j] + gapFunction.calcPenalty(false);
-				int match = aMatrix[i-1][j-1] + scoringMatrix.getScore(sequence.getSequenceA()[i-1], sequence.getSequenceB()[j-1]);
+				float gap1 = aMatrix[i][j-1] + gapFunction.calcPenalty(false);
+				float gap2 = aMatrix[i-1][j] + gapFunction.calcPenalty(false);
+				float match = aMatrix[i-1][j-1] + scoringMatrix.getScore(sequence.getSequenceA()[i-1], sequence.getSequenceB()[j-1]);
 				aMatrix[i][j] = Math.max(0, Math.max(match, Math.max(gap1, gap2)));
 			}
 		}
 	}
 
-	public int checkScore(int i, int j) {
-		int gap1 = checkScore(i, j) + gapFunction.calcPenalty(false);
-		int gap2 = checkScore(i, j) + gapFunction.calcPenalty(false);
-		int match = checkScore(i, j) + scoringMatrix.getScore(sequence.getSequenceA()[i-1], sequence.getSequenceB()[j-1]);
+	public float checkScore(int i, int j) {
+		float gap1 = checkScore(i, j) + gapFunction.calcPenalty(false);
+		float gap2 = checkScore(i, j) + gapFunction.calcPenalty(false);
+		float match = checkScore(i, j) + scoringMatrix.getScore(sequence.getSequenceA()[i-1], sequence.getSequenceB()[j-1]);
 		return Math.max(0, Math.max(match, Math.max(gap1, gap2)));
 	}
 	
@@ -34,7 +34,7 @@ public class Local extends Alignment{
 		int lengthY = aMatrix[0].length - 1; 
 		int i = lengthX;
 		int j = lengthY;
-		int maxScore = aMatrix[0][0]; 		
+		float maxScore = aMatrix[0][0]; 		
 		for (int x = 0; x < lengthX+1; x++) {
 			for (int y = 0; y < lengthY+1; y++) {
 				if(aMatrix[x][y] > maxScore) {
@@ -52,10 +52,9 @@ public class Local extends Alignment{
 	}
 	
 	public void backtrack(int i, int j) { 
-		char[] seqA = sequence.getSequenceA();
 		String a = "";
 		String b = "";
-		sequence.setScore(aMatrix[i][j]);
+		float finalScore = aMatrix[i][j];	
 		if(i != sequence.getSequenceA().length) {
 			for(int x = i; x < sequence.getSequenceA().length; x++) {
 				a += sequence.getSequenceA()[x];
@@ -69,6 +68,7 @@ public class Local extends Alignment{
 			}
 		}
 		while(aMatrix[i][j] != 0) {
+			
 			if(aMatrix[i][j] == aMatrix[i-1][j] + gapFunction.calcPenalty(false)){
 				i = i-1; 
 				a = sequence.getSequenceA()[i] + a;
@@ -96,7 +96,7 @@ public class Local extends Alignment{
 				b = sequence.getSequenceB()[x] + b;
 			}
 		}
-		sequence.setSequenceA(a.toCharArray());
-		sequence.setSequenceB(b.toCharArray());
+		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), finalScore);
+		finalAlignment = out;
 	}
 }

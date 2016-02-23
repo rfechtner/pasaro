@@ -6,18 +6,20 @@ public class SequencePair {
 	private String nameA;
 	private String nameB;
 	private float score;
-	boolean alignment;
-	
-	public SequencePair(String sequenceA, String sequenceB) {
-		this.sequenceA = sequenceA.toCharArray();
-		this.sequenceB = sequenceB.toCharArray(); 
-	}
 	
 	public SequencePair(String sequenceA, String sequenceB, String nameA, String nameB) {
+		this.sequenceA = sequenceA.toCharArray();
+		this.sequenceB = sequenceB.toCharArray(); 
+		this.nameA = nameA;
+		this.nameB = nameB;
+	}
+	
+	public SequencePair(String sequenceA, String sequenceB, String nameA, String nameB, float score) {
 		this.sequenceA = sequenceA.toCharArray();
 		this.sequenceB = sequenceB.toCharArray();
 		this.nameA = nameA;
 		this.nameB = nameB;
+		this.score = score;
 	}
 
 	public char[] getSequenceA() {

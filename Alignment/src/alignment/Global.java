@@ -30,6 +30,7 @@ public class Global extends Alignment{
 	public void backtrack(int i, int j) {
 		String a = "";
 		String b = "";
+		float finalScore = aMatrix[i][j];	
 		while(i != 0 && j != 0) {
 			if(aMatrix[i][j] == aMatrix[i-1][j] + gapFunction.calcPenalty(false)){
 				i = i-1; 
@@ -58,6 +59,7 @@ public class Global extends Alignment{
 				b = sequence.getSequenceB()[x] + b;
 			}
 		}
-		
+		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), finalScore);
+		finalAlignment = out;
 	}
 }
