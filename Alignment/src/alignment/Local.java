@@ -31,6 +31,7 @@ public class Local extends Alignment{
 		int i = lengthX;
 		int j = lengthY;
 		int maxScore = getaMatrix()[0][0]; 
+		System.out.println(maxScore);
 		for (int x = 0; x < lengthX-1; x++) {
 			for (int y = 0; y < lengthY-1; y++) {
 				if(getaMatrix()[x][y] > maxScore) {
