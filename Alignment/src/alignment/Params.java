@@ -66,7 +66,7 @@ public class Params {
 			for (int i = 0; i < args.length; i++){
 				if(args[i].charAt(0) == '-'){
 					if(args[i].charAt(1) == 'm') {
-						params.put("m", args[i+1].substring(1));
+						params.put("m", args[i+1]);
 					} else if (args[i].charAt(1) == '-'){
 						String flag = args[i].substring(2);
 						String par = ""; 
