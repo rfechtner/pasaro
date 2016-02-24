@@ -20,13 +20,6 @@ public class Local extends Alignment{
 			}
 		}
 	}
-
-	public float checkScore(int i, int j) {
-		float gap1 = checkScore(i, j) + gapFunction.calcPenalty(1);
-		float gap2 = checkScore(i, j) + gapFunction.calcPenalty(1);
-		float match = checkScore(i, j) + scoringMatrix.getScore(sequence.getSequenceA()[i-1], sequence.getSequenceB()[j-1]);
-		return Math.max(0, Math.max(match, Math.max(gap1, gap2)));
-	}
 	
 	public void make() {
 		super.make();

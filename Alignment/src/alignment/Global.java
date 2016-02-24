@@ -26,6 +26,8 @@ public class Global extends Alignment{
 		super.make();
 		backtrack(aMatrix.length - 1, aMatrix[0].length - 1);
 		System.out.println(aMatrix[aMatrix.length - 1][aMatrix[0].length - 1]);
+		System.out.println(checkScore());
+//		printMatrix();
 	}
 	
 	public void backtrack(int i, int j) {

@@ -10,6 +10,7 @@ import alignment.GotohGlobal;
 import alignment.GotohLocal;
 import alignment.Local;
 import alignmentUtils.GapFunction;
+import alignmentUtils.Output;
 import alignmentUtils.ScoringMatrix;
 import alignmentUtils.SequencePair;
 import alignmentUtils.SequenceParser;
@@ -23,6 +24,8 @@ public class Runner {
 		ScoringMatrix sm = new ScoringMatrix(p.getM());
 		GapFunction gf = new GapFunction(p.getGo(), p.getGe());
 		ArrayList<SequencePair> sequencePairs = SequenceParser.parseSeq(p.getSeqlib(), p.getPairs());
+		
+		ArrayList<Alignment> alignments = new ArrayList<Alignment>();
 		
 		for ( SequencePair sp : sequencePairs ){
 			Alignment al = null;
@@ -41,10 +44,11 @@ public class Runner {
 			}
 			
 			al.make();
-			
-			//System.out.println("Alignment für " + sp.toString());
-			//System.out.println("\t Alignment: " + al.getFinalAlignment().toString());
-			//System.out.println("\t Score: " + al.getFinalScore());
+			alignments.add(al);
+		}
+		
+		for (Alignment al : alignments){
+			Output.genOutput(al.getFinalAlignment(), p.getFormat());
 		}
 		
 		System.out.println(p.toString());

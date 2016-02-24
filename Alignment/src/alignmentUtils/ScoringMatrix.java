@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 
+import parameterUtils.ParamException;
+
 public class ScoringMatrix {
 	private int[][] scoringMatrix;
 
@@ -54,20 +56,16 @@ public class ScoringMatrix {
 			br.close();
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				throw new ParamException();
+			} catch (ParamException e1) {
+				ParamException.printHelp();
+			}
 		}
 		
 		return scoringMatrix;
 	}
-	
-	//public int getScore(char a, char b) {
-	//	if(a == b) {
-	//		return 3;
-	//	}else {
-	//		return -2;
-	//	}
-	//}
-	
+		
 	public int getScore(char a, char b){
 		return scoringMatrix[(int) a - 65][(int) b - 65];
 	}

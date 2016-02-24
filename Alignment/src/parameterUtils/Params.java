@@ -6,8 +6,8 @@ import enums.AlignmentFormat;
 import enums.AlignmentType;
 
 public class Params {
-		private int go;
-		private int ge;
+		private float go;
+		private float ge;
 		private String dpmatrices;
 		private boolean check;
 		private String pairs;
@@ -20,8 +20,17 @@ public class Params {
 		public Params(HashMap<String, String> params){
 
 			try {
-				if (params.get("go") != null) { go = Integer.parseInt(params.get("go")); } else { go = -12; }
-				if (params.get("ge") != null) { ge = Integer.parseInt(params.get("ge")); } else { ge = -1; }
+				if (params.get("nw") != null) { nw = true; } else { nw = false; }
+				
+				if (params.get("go") != null) { 
+					if (nw) { go = 0; }
+					else { go = Float.parseFloat(params.get("go")); }
+				} else { 
+					if (nw) { go = 0; } 
+					else { go = -12; } 
+				}
+				
+				if (params.get("ge") != null) { ge = Float.parseFloat(params.get("ge")); } else { ge = -1; }
 				
 				if (params.get("dpmatrices") != null) dpmatrices = params.get("dpmatrices");
 				
@@ -50,8 +59,6 @@ public class Params {
 					if (et.name().equalsIgnoreCase(params.get("mode"))) this.mode = et; 
 				}
 				if (mode == null) throw new ParamException();
-				
-				if (params.get("nw") != null) { nw = true; } else { nw = false; }
 				
 				if (params.get("format") == null) throw new ParamException();
 				for (AlignmentFormat af : AlignmentFormat.values()){
@@ -93,11 +100,11 @@ public class Params {
 			return params;
 		}
 
-		public int getGo() {
+		public float getGo() {
 			return go;
 		}
 
-		public int getGe() {
+		public float getGe() {
 			return ge;
 		}
 

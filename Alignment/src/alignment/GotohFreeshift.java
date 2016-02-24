@@ -10,6 +10,11 @@ public class GotohFreeshift extends Freeshift{
 		super(sequence, gapFunction, scoringMatrix);
 	}
 
+	public void initMatrix() { 
+		super.initMatrix();
+		super.initID();
+	}
+	
 	public void fillMatrix() {
 		
 	}

@@ -7,9 +7,11 @@ public class SequencePair {
 	private String nameB;
 	private float score;
 	
-	public SequencePair(String sequenceA, String sequenceB) {
+	public SequencePair(String sequenceA, String sequenceB, String nameA, String nameB) {
 		this.sequenceA = sequenceA.toCharArray();
 		this.sequenceB = sequenceB.toCharArray(); 
+		this.nameA = nameA;
+		this.nameB = nameB;
 	}
 	
 	public SequencePair(String sequenceA, String sequenceB, String nameA, String nameB, float score) {
@@ -57,5 +59,8 @@ public class SequencePair {
 		
 	}
 	
+	public float getScore(){
+		return score;
+	}
 	
 }
