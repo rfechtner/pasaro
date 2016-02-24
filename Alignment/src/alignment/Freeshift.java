@@ -31,54 +31,6 @@ public class Freeshift extends Alignment{
 				j = x;
 			}
 		}
-		backtrack(i,j);
-	}
-	
-	public void backtrack(int i, int j) {
-		String a = "";
-		String b = "";
-		float finalScore = aMatrix[i][j];	
-		if(i != sequence.getSequenceA().length) {
-			for(int x = i; x < sequence.getSequenceA().length; x++) {
-				a += sequence.getSequenceA()[x];
-				b += "-";
-			}
-		}
-		if(j != sequence.getSequenceB().length) {
-			for(int x = j; x < sequence.getSequenceB().length; x++) {
-				a += "-";
-				b += sequence.getSequenceB()[x];
-			}
-		}
-		while(i != 0 && j != 0) {
-			if(aMatrix[i][j] == aMatrix[i-1][j] + gapFunction.calcPenalty(1)){
-				i = i-1; 
-				a = sequence.getSequenceA()[i] + a;
-				b = "-" + b;
-			}else if(aMatrix[i][j] == aMatrix[i][j-1] + gapFunction.calcPenalty(1)) {
-				j = j-1;
-				a = "-" + a;
-				b = sequence.getSequenceB()[j] + b;
-			}else {
-				i = i-1;
-				j = j-1;
-				a = sequence.getSequenceA()[i] + a;
-				b = sequence.getSequenceB()[j] + b;
-			}
-		}
-		if(i != 0) {
-			for(int x = i-1; x >= 0; x--) {
-				a = sequence.getSequenceA()[x] + a;
-				b = "-" + b;
-			}
-		}
-		if (j != 0){
-			for(int x = j-1; x >= 0; x--) {
-				a = "-" + a;
-				b = sequence.getSequenceB()[x] + b;
-			}
-		}
-		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), finalScore);
-		finalAlignment = out;
+		backtrack(i,j, Integer.MAX_VALUE);
 	}
 }
