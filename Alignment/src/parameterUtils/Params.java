@@ -80,7 +80,11 @@ public class Params {
 					} else if (args[i].charAt(1) == '-'){
 						String flag = args[i].substring(2);
 						String par = ""; 
-						if(args[i+1].charAt(0) != '-' || (int) args[i+1].charAt(0) < 57) par = args[i+1];
+						if(i+1 < args.length) {
+							if (args[i+1].charAt(0) != '-' || (int) args[i+1].charAt(0) < 57) {
+								par = args[i+1];
+							}
+						}
 						
 						switch (flag) {
 							case "go": params.put("go", par); break;
