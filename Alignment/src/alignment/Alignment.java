@@ -109,8 +109,7 @@ public abstract class Alignment {
 		}
 	}
 
-	public void fillMatrix() { // weil ja für global und freeshift gleich, dann
-								// bei goto und lokal überschreiben
+	public void fillMatrix() {
 		for (int i = 1; i < aMatrix.length; i++) {
 			for (int j = 1; j < aMatrix[0].length; j++) {
 				float gap1 = aMatrix[i][j - 1] + gapFunction.calcPenalty(1);

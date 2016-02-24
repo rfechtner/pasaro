@@ -13,7 +13,6 @@ public class Global extends Alignment{
 
 	public void initMatrix() {
 		super.initMatrix();
-		aMatrix[0][0] = 0;
 		for (int i = 1; i < aMatrix.length; i++) {
 			aMatrix[i][0] = gapFunction.calcPenalty(i); 
 		}
@@ -25,9 +24,6 @@ public class Global extends Alignment{
 	public void make() {
 		super.make();
 		backtrack(aMatrix.length - 1, aMatrix[0].length - 1);
-		System.out.println(aMatrix[aMatrix.length - 1][aMatrix[0].length - 1]);
-		System.out.println(checkScore());
-//		printMatrix();
 	}
 	
 	public void backtrack(int i, int j) {
