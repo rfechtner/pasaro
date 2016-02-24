@@ -5,10 +5,10 @@ public class ParamException extends Exception{
 	private static String helpText = "Syntax:\n" +
 "java ­jar alignment.jar [­­--go <gapopen>] --[­­ge <gapextend>]\n" +
 "\t[--­­dpmatrices <dir>] [­­--check]" +
-"\t--pairs <pairfile> ­­seqlib <seqlibfile>\n" + 
+"\t--pairs <pairfile> ­­--seqlib <seqlibfile>\n" + 
 "\t-­m <matrixname>\n" +
 "\t--­­mode <local|global|freeshift> [­­--nw]\n" +
-"\t­­format <scores|ali|html>\n" +
+"\t­­--format <scores|ali|html>\n" +
 "Options:\n" +
 "\t--­­pairs <pairfile> \t\t path to pairs file\n" +
 "\t--seqlib <seqlibfile> \t\t path to sequence library file\n" +
