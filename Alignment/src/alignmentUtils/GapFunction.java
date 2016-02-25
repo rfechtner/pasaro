@@ -1,15 +1,15 @@
 package alignmentUtils;
 
 public class GapFunction {
-	private float gapOpen;
-	private float gapExtend;
+	private int gapOpen;
+	private int gapExtend;
 
 	public GapFunction(float gapOpen, float gapExtend) {
-		this.gapOpen = gapOpen;
-		this.gapExtend = gapExtend;
+		this.gapOpen = (int)(gapOpen * 1000);
+		this.gapExtend = (int)(gapExtend * 1000);
 	}
 
-	public float calcPenalty(int extend) {
+	public int calcPenalty(int extend) {
 		return (gapExtend * extend) + gapOpen;
 
 	}

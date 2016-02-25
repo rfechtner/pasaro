@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
 
@@ -18,9 +19,10 @@ public abstract class Alignment {
 	protected SequencePair finalAlignment;
 	protected GapFunction gapFunction;
 	protected ScoringMatrix scoringMatrix;
-	protected float[][] aMatrix;
-	protected float[][] iMatrix;
-	protected float[][] dMatrix;
+	protected int[][] aMatrix;
+	protected int[][] iMatrix;
+	protected int[][] dMatrix;
+//	protected static DecimalFormat df = new DecimalFormat("#.##");
 
 	public Alignment(SequencePair sequence, GapFunction gapFunction,
 			ScoringMatrix scoringMatrix) {
@@ -125,9 +127,9 @@ public abstract class Alignment {
 	
 //	calculates position i,j in dp-matrix for linear gap costs
 	public void calcMatrix(int i, int j) {
-		float gap1 = aMatrix[i][j - 1] + gapFunction.calcPenalty(1);
-		float gap2 = aMatrix[i - 1][j] + gapFunction.calcPenalty(1);
-		float match = aMatrix[i - 1][j - 1]
+		int gap1 = aMatrix[i][j - 1] + gapFunction.calcPenalty(1);
+		int gap2 = aMatrix[i - 1][j] + gapFunction.calcPenalty(1);
+		int match = aMatrix[i - 1][j - 1]
 				+ scoringMatrix.getScore(
 						sequence.getSequenceA()[i - 1],
 						sequence.getSequenceB()[j - 1]);
@@ -250,7 +252,7 @@ public abstract class Alignment {
 		}
 		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), finalScore);
 		finalAlignment = out;
-		printResult();
+//		printResult();
 	}
 	
 //	does traceback linear gap cost alignments
@@ -301,10 +303,10 @@ public abstract class Alignment {
 				b = sequence.getSequenceB()[x] + b;
 			}
 		}
-		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), finalScore);
+		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), Float.parseFloat(df.format(finalScore)));
 		finalAlignment = out;
-		printResult();
-		printMatrix();
+//		printResult();
+//		printMatrix();
 	}
 	
 	public SequencePair getFinalAlignment() {
