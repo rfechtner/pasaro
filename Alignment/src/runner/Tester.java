@@ -2,8 +2,6 @@ package runner;
 
 import java.io.IOException;
 
-<<<<<<< HEAD
-=======
 import enums.AlignmentFormat;
 import enums.AlignmentType;
 
