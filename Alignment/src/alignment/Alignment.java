@@ -123,6 +123,7 @@ public abstract class Alignment {
 		return Math.max(match, Math.max(gap1, gap2));
 	}
 	
+//	calculates position i,j in dp-matrix for linear gap costs
 	public void calcMatrix(int i, int j) {
 		float gap1 = aMatrix[i][j - 1] + gapFunction.calcPenalty(1);
 		float gap2 = aMatrix[i - 1][j] + gapFunction.calcPenalty(1);
