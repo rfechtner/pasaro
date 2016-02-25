@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
 
@@ -19,7 +18,7 @@ public abstract class Alignment {
 	protected SequencePair finalAlignment;
 	protected GapFunction gapFunction;
 	protected ScoringMatrix scoringMatrix;
-	protected int[][] aMatrix;
+	protected int[][] aMatrix = new int[0][0];
 	protected int[][] iMatrix;
 	protected int[][] dMatrix;
 //	protected static DecimalFormat df = new DecimalFormat("#.##");
@@ -138,17 +137,17 @@ public abstract class Alignment {
 	
 //	calculates position i,j in dp-matrix for gotoh alignment 
 	public void calcGotoh(int i, int j) {
-		float opI = aMatrix[i][j - 1] + gapFunction.calcPenalty(1);
-		float extI = iMatrix[i][j - 1] + gapFunction.getGapExtend();
+		int opI = aMatrix[i][j - 1] + gapFunction.calcPenalty(1);
+		int extI = iMatrix[i][j - 1] + gapFunction.getGapExtend();
 		iMatrix[i][j] = Math.max(opI, extI);
-		float opD = aMatrix[i - 1][j] + gapFunction.calcPenalty(1);
-		float extD = dMatrix[i - 1][j] + gapFunction.getGapExtend();
+		int opD = aMatrix[i - 1][j] + gapFunction.calcPenalty(1);
+		int extD = dMatrix[i - 1][j] + gapFunction.getGapExtend();
 		dMatrix[i][j] = Math.max(opD, extD);
-		float match = aMatrix[i - 1][j - 1]
+		int match = aMatrix[i - 1][j - 1]
 				+ scoringMatrix.getScore(sequence.getSequenceA()[i - 1],
 						sequence.getSequenceB()[j - 1]);
-		float ins = iMatrix[i][j];
-		float del = dMatrix[i][j];
+		int ins = iMatrix[i][j];
+		int del = dMatrix[i][j];
 		aMatrix[i][j] = Math.max(match, Math.max(ins, del));
 	}
 
@@ -171,15 +170,14 @@ public abstract class Alignment {
 
 //	initializes default values of dp-matrix
 	public void initMatrix() {
-		aMatrix = new float[sequence.getSequenceA().length + 1][sequence
-				.getSequenceB().length + 1];
+		aMatrix = new int[sequence.getSequenceA().length + 1][sequence.getSequenceB().length + 1];
 	}
 
 //	initializes insertion and deletion matrix
 	public void initID() {
-		iMatrix = new float[sequence.getSequenceA().length + 1][sequence
+		iMatrix = new int[sequence.getSequenceA().length + 1][sequence
 				.getSequenceB().length + 1];
-		dMatrix = new float[sequence.getSequenceA().length + 1][sequence
+		dMatrix = new int[sequence.getSequenceA().length + 1][sequence
 				.getSequenceB().length + 1];
 		for (int i = 1; i < iMatrix.length; i++) {
 			iMatrix[i][0] = Integer.MIN_VALUE;
@@ -202,7 +200,7 @@ public abstract class Alignment {
 	public void gotohBacktrack(int i, int j, int end) {
 		String a = "";
 		String b = "";
-		float finalScore = aMatrix[i][j];	
+		float finalScore = aMatrix[i][j] / 1000f;	
 		if(i != sequence.getSequenceA().length) {
 			for(int x = i; x < sequence.getSequenceA().length; x++) {
 				a += sequence.getSequenceA()[x];
@@ -259,7 +257,7 @@ public abstract class Alignment {
 	public void backtrack(int i, int j, int end) {
 		String a = "";
 		String b = "";
-		float finalScore = aMatrix[i][j];		
+		float finalScore = aMatrix[i][j] / 1000f;		
 		if(i != sequence.getSequenceA().length) {
 			for(int x = i; x < sequence.getSequenceA().length; x++) {
 				a += sequence.getSequenceA()[x];
@@ -303,7 +301,7 @@ public abstract class Alignment {
 				b = sequence.getSequenceB()[x] + b;
 			}
 		}
-		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), Float.parseFloat(df.format(finalScore)));
+		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), finalScore);
 		finalAlignment = out;
 //		printResult();
 //		printMatrix();

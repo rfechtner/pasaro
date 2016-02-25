@@ -16,7 +16,7 @@ public class Freeshift extends Alignment{
 		int lengthY = aMatrix[0].length - 1; 
 		int i = lengthX;
 		int j = lengthY;
-		float maxScore = aMatrix[i][j]; 
+		int maxScore = aMatrix[i][j]; 
 		for (int x = lengthX; x > 0; x--) {
 			if(aMatrix[x][lengthY] > maxScore) {
 				maxScore = aMatrix[x][lengthY];

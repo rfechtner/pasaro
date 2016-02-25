@@ -14,11 +14,11 @@ public class GapFunction {
 
 	}
 
-	public float getGapOpen() {
+	public int getGapOpen() {
 		return gapOpen;
 	}
 
-	public float getGapExtend() {
+	public int getGapExtend() {
 		return gapExtend;
 	}
 }

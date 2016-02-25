@@ -14,7 +14,7 @@ import alignmentUtils.SequencePair;
 
 public class Tester {
 	public static void main(String[] args) throws IOException {
-		Alignment a = new GotohLocal(new SequencePair("MAUS", "SUMA", "SeqA", "SeqB"), new GapFunction(0, -1), new ScoringMatrix("/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
+		Alignment a = new GotohGlobal(new SequencePair("MAUS", "SUMA", "SeqA", "SeqB"), new GapFunction(0, -1), new ScoringMatrix("/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
 		a.make();
 //		a.dpMatrices("/home/b/beckerr/Desktop/");
 	}

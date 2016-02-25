@@ -16,15 +16,15 @@ public class GotohLocal extends Local{
 	}
 	
 	public void calcGotoh(int i, int j) {
-		float opI = aMatrix[i][j-1] + gapFunction.calcPenalty(1);
-		float extI = iMatrix[i][j-1] + gapFunction.getGapExtend();
+		int opI = aMatrix[i][j-1] + gapFunction.calcPenalty(1);
+		int extI = iMatrix[i][j-1] + gapFunction.getGapExtend();
 		iMatrix[i][j] = Math.max(opI, extI);
-		float opD = aMatrix[i-1][j] + gapFunction.calcPenalty(1);
-		float extD = dMatrix[i-1][j] + gapFunction.getGapExtend();
+		int opD = aMatrix[i-1][j] + gapFunction.calcPenalty(1);
+		int extD = dMatrix[i-1][j] + gapFunction.getGapExtend();
 		dMatrix[i][j] = Math.max(opD, extD);
-		float match = aMatrix[i-1][j-1] + scoringMatrix.getScore(sequence.getSequenceA()[i-1], sequence.getSequenceB()[j-1]);
-		float ins = iMatrix[i][j];
-		float del = dMatrix[i][j];
+		int match = aMatrix[i-1][j-1] + scoringMatrix.getScore(sequence.getSequenceA()[i-1], sequence.getSequenceB()[j-1]);
+		int ins = iMatrix[i][j];
+		int del = dMatrix[i][j];
 		aMatrix[i][j] = Math.max(0, Math.max(match, Math.max(ins, del)));
 	}
 	
