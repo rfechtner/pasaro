@@ -39,7 +39,7 @@ public class Output {
 							"\t<div class='information'>\n" +
 								alignment.getScore() +
 							"\t</div>\n" +
-							"\t<div class='sequences '>\n" +
+							"\t<div class='sequences" + alignment.getNameA() + "_" + alignment.getNameB() + "'>\n" +
 							chars +
 							"\t</div>\n" +
 						"</div>\n";
