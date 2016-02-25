@@ -44,7 +44,7 @@ public class ScoringMatrix {
 					for(int i = 1; i < fields.length; i++){
 						int x = (int) rowindex[count] - 65;
 						int y = (int) columnindex[i-1] - 65;
-						int score = Integer.parseInt(fields[i].substring(0, fields[i].length() - 1));
+						int score = (int) (Float.parseFloat(fields[i].substring(0, fields[i].length() - 1)) * 1000);
 						scoringMatrix[x][y] = score; 
 						scoringMatrix[y][x] = score;
 					}
