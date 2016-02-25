@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -19,10 +19,10 @@ public abstract class Alignment {
 	protected SequencePair finalAlignment;
 	protected GapFunction gapFunction;
 	protected ScoringMatrix scoringMatrix;
-	protected int[][] aMatrix;
+	protected int[][] aMatrix = new int[0][0];
 	protected int[][] iMatrix;
 	protected int[][] dMatrix;
-//	protected static DecimalFormat df = new DecimalFormat("#.##");
+	protected ArrayList<Integer> path = new ArrayList<Integer>();
 
 	public Alignment(SequencePair sequence, GapFunction gapFunction,
 			ScoringMatrix scoringMatrix) {
@@ -45,7 +45,7 @@ public abstract class Alignment {
 		File file = new File(path);
 		file.createNewFile();
 		BufferedImage image = new BufferedImage(sizeX, sizeY, BufferedImage.TYPE_INT_ARGB);
-		
+
 		Graphics2D g = image.createGraphics();
 		g.setPaint(Color.white);
 		g.fillRect ( 0, 0, image.getWidth(), image.getHeight() );
@@ -58,14 +58,14 @@ public abstract class Alignment {
 		}
 		g.drawString(row, 0, 15);
 		for (int i = 0; i < aMatrix[0].length; i++) {
-			
+
 			if(i == 0) {
 				row = String.format("%7s", "-");
 			}else {
 				row = String.format("%7s", sequence.getSequenceB()[i-1]);
 			}
-			for (int j = 0; j < aMatrix.length; j++) {																
-					row += String.format("%7s", aMatrix[j][i]);				
+			for (int j = 0; j < aMatrix.length; j++) {
+					row += String.format("%7s", String.format("%.2f",(aMatrix[j][i] / 1000f)));
 			}
 			g.drawString(row, 0, (i*15+30));
 		}
@@ -75,24 +75,7 @@ public abstract class Alignment {
 
 //	calculates score of final alignment
 	public float checkScore() {
-		float score = 0;
-		char[] check;
-		for (int i = 0; i < finalAlignment.getSequenceA().length; i++) {
-			if ((check = finalAlignment.getSequenceA())[i] == '-'
-					|| (check = finalAlignment.getSequenceB())[i] == '-') {
-				int gaps = 1;
-				while (i + 1 < check.length && check[i + 1] == '-') {
-					i++;
-					gaps++;
-				}
-				score += gapFunction.calcPenalty(gaps);
-			} else {
-				score += scoringMatrix.getScore(
-						finalAlignment.getSequenceA()[i],
-						finalAlignment.getSequenceB()[i]);
-			}
-		}
-		return score;
+		return 0;
 	}
 
 //	calculates score of global alignment with recursive method
@@ -124,7 +107,7 @@ public abstract class Alignment {
 		}
 		return Math.max(match, Math.max(gap1, gap2));
 	}
-	
+
 //	calculates position i,j in dp-matrix for linear gap costs
 	public void calcMatrix(int i, int j) {
 		int gap1 = aMatrix[i][j - 1] + gapFunction.calcPenalty(1);
@@ -135,20 +118,21 @@ public abstract class Alignment {
 						sequence.getSequenceB()[j - 1]);
 		aMatrix[i][j] = Math.max(match, Math.max(gap1, gap2));
 	}
-	
-//	calculates position i,j in dp-matrix for gotoh alignment 
+
+//	calculates position i,j in dp-matrix for gotoh alignment
 	public void calcGotoh(int i, int j) {
-		float opI = aMatrix[i][j - 1] + gapFunction.calcPenalty(1);
-		float extI = iMatrix[i][j - 1] + gapFunction.getGapExtend();
+		int opI = aMatrix[i][j - 1] + gapFunction.calcPenalty(1);
+		int extI = iMatrix[i][j - 1] + gapFunction.getGapExtend();
+//		System.out.println(iMatrix[i][j - 1] + " " + gapFunction.getGapExtend() + " " + extI);
 		iMatrix[i][j] = Math.max(opI, extI);
-		float opD = aMatrix[i - 1][j] + gapFunction.calcPenalty(1);
-		float extD = dMatrix[i - 1][j] + gapFunction.getGapExtend();
+		int opD = aMatrix[i - 1][j] + gapFunction.calcPenalty(1);
+		int extD = dMatrix[i - 1][j] + gapFunction.getGapExtend();
 		dMatrix[i][j] = Math.max(opD, extD);
-		float match = aMatrix[i - 1][j - 1]
+		int match = aMatrix[i - 1][j - 1]
 				+ scoringMatrix.getScore(sequence.getSequenceA()[i - 1],
 						sequence.getSequenceB()[j - 1]);
-		float ins = iMatrix[i][j];
-		float del = dMatrix[i][j];
+		int ins = iMatrix[i][j];
+		int del = dMatrix[i][j];
 		aMatrix[i][j] = Math.max(match, Math.max(ins, del));
 	}
 
@@ -156,14 +140,18 @@ public abstract class Alignment {
 		System.out.println(finalAlignment.getScore());
 		System.out.println(finalAlignment.getSequenceA());
 		System.out.println(finalAlignment.getSequenceB());
+		for (int i = 0; i < path.size(); i++) {
+			System.out.print(path.get(i) + " ");
+		}
+		System.out.print("\n");
 	}
-	
+
 //	prints dp-matrix to standart out
 	public void printMatrix() {
 		for (int i = 0; i < aMatrix[0].length; i++) {
 			String row = "";
 			for (int j = 0; j < aMatrix.length; j++) {
-				row += String.format("%7s", aMatrix[j][i]);
+				row += String.format("%20d", aMatrix[j][i]);
 			}
 			System.out.println(row);
 		}
@@ -171,21 +159,20 @@ public abstract class Alignment {
 
 //	initializes default values of dp-matrix
 	public void initMatrix() {
-		aMatrix = new float[sequence.getSequenceA().length + 1][sequence
-				.getSequenceB().length + 1];
+		aMatrix = new int[sequence.getSequenceA().length + 1][sequence.getSequenceB().length + 1];
 	}
 
 //	initializes insertion and deletion matrix
 	public void initID() {
-		iMatrix = new float[sequence.getSequenceA().length + 1][sequence
+		iMatrix = new int[sequence.getSequenceA().length + 1][sequence
 				.getSequenceB().length + 1];
-		dMatrix = new float[sequence.getSequenceA().length + 1][sequence
+		dMatrix = new int[sequence.getSequenceA().length + 1][sequence
 				.getSequenceB().length + 1];
 		for (int i = 1; i < iMatrix.length; i++) {
-			iMatrix[i][0] = Integer.MIN_VALUE;
+			iMatrix[i][0] = Integer.MIN_VALUE / 2;
 		}
 		for (int j = 1; j < dMatrix[0].length; j++) {
-			dMatrix[0][j] = Integer.MIN_VALUE;
+			dMatrix[0][j] = Integer.MIN_VALUE / 2;
 		}
 	}
 
@@ -202,7 +189,7 @@ public abstract class Alignment {
 	public void gotohBacktrack(int i, int j, int end) {
 		String a = "";
 		String b = "";
-		float finalScore = aMatrix[i][j];	
+		float finalScore = aMatrix[i][j] / 1000f;
 		if(i != sequence.getSequenceA().length) {
 			for(int x = i; x < sequence.getSequenceA().length; x++) {
 				a += sequence.getSequenceA()[x];
@@ -219,11 +206,13 @@ public abstract class Alignment {
 			if(aMatrix[i][j] == end) {
 				break;
 			}
+			path.add(i);
+			path.add(j);
 			if(aMatrix[i][j] == iMatrix[i][j]) {
 				do {
 					j--;
 					a = "-" + a;
-					b = sequence.getSequenceB()[j] + b;					
+					b = sequence.getSequenceB()[j] + b;
 				}while(aMatrix[i][j] + gapFunction.calcPenalty(1) != iMatrix[i][j+1]);
 			}else if(aMatrix[i][j] == dMatrix[i][j]) {
 				do {
@@ -235,7 +224,7 @@ public abstract class Alignment {
 				i = i-1;
 				j = j-1;
 				a = sequence.getSequenceA()[i] + a;
-				b = sequence.getSequenceB()[j] + b;	
+				b = sequence.getSequenceB()[j] + b;
 			}
 		}
 		if(i != 0) {
@@ -250,16 +239,16 @@ public abstract class Alignment {
 				b = sequence.getSequenceB()[x] + b;
 			}
 		}
-		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), finalScore);
+		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), String.format("%.4f", finalScore).replace(',', '.'));
 		finalAlignment = out;
 //		printResult();
 	}
-	
+
 //	does traceback linear gap cost alignments
 	public void backtrack(int i, int j, int end) {
 		String a = "";
 		String b = "";
-		float finalScore = aMatrix[i][j];		
+		float finalScore = aMatrix[i][j] / 1000f;
 		if(i != sequence.getSequenceA().length) {
 			for(int x = i; x < sequence.getSequenceA().length; x++) {
 				a += sequence.getSequenceA()[x];
@@ -276,8 +265,10 @@ public abstract class Alignment {
 			if(aMatrix[i][j] == end) {
 				break;
 			}
+			path.add(i);
+			path.add(j);
 			if(aMatrix[i][j] == aMatrix[i-1][j] + gapFunction.calcPenalty(1)){
-				i = i-1; 
+				i = i-1;
 				a = sequence.getSequenceA()[i] + a;
 				b = "-" + b;
 			}else if(aMatrix[i][j] == aMatrix[i][j-1] + gapFunction.calcPenalty(1)) {
@@ -303,12 +294,9 @@ public abstract class Alignment {
 				b = sequence.getSequenceB()[x] + b;
 			}
 		}
-		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), Float.parseFloat(df.format(finalScore)));
-		finalAlignment = out;
-//		printResult();
-//		printMatrix();
+		finalAlignment = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), String.format("%.4f", finalScore).replace(',', '.'));
 	}
-	
+
 	public SequencePair getFinalAlignment() {
 		return finalAlignment;
 	}

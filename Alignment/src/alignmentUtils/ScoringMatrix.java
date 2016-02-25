@@ -12,6 +12,12 @@ public class ScoringMatrix {
 
 	public ScoringMatrix(String file) {
 		this.scoringMatrix = parseMat(file);
+//		for (int i = 0; i < scoringMatrix[0].length; i++) {
+//			for (int j = 0; j < scoringMatrix.length; j++) {
+//				System.out.print(scoringMatrix[j][i]);
+//			}
+//			System.out.println("\n");
+//		}
 	}
 	
 	public static int[][] parseMat(String file){
