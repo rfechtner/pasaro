@@ -8,14 +8,14 @@ import java.util.Arrays;
 import parameterUtils.ParamException;
 
 public class ScoringMatrix {
-	private float[][] scoringMatrix;
+	private int[][] scoringMatrix;
 
 	public ScoringMatrix(String file) {
 		this.scoringMatrix = parseMat(file);
 	}
 	
-	public static float[][] parseMat(String file){
-		float[][] scoringMatrix = new float[26][26];
+	public static int[][] parseMat(String file){
+		int[][] scoringMatrix = new int[26][26];
 		
 		try {
 			FileReader fr = new FileReader(file);
@@ -68,7 +68,7 @@ public class ScoringMatrix {
 		return scoringMatrix;
 	}
 		
-	public float getScore(char a, char b){
+	public int getScore(char a, char b){
 		return scoringMatrix[(int) a - 65][(int) b - 65];
 	}
 
