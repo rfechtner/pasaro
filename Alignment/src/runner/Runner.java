@@ -1,6 +1,7 @@
 package runner;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import alignment.Alignment;
 import alignment.Freeshift;
@@ -43,7 +44,13 @@ public class Runner {
 				}
 			}
 			al.make();
-			alignments.add(al);
+			if(p.isCheck()) {
+				if(!al.getFinalAlignment().getScore().equals(al.checkScore())) {
+					alignments.add(al);
+				}
+			}else {
+				alignments.add(al);
+			}
 		}
 		
 		for (Alignment al : alignments){

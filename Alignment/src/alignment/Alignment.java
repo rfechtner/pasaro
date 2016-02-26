@@ -77,8 +77,8 @@ public abstract class Alignment {
 	}
 
 //	calculates score of final alignment
-	public float checkScore() {
-		return 0;
+	public String checkScore() {
+		return null;
 	}
 
 //	calculates score of global alignment with recursive method

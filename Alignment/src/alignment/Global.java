@@ -11,7 +11,7 @@ public class Global extends Alignment{
 		super(sequence, gapFunction, scoringMatrix);
 	}
 
-    public float checkScore() {
+    public String checkScore() {
 		float score = 0;
 		char[] check;
 		for (int i = 0; i < finalAlignment.getSequenceA().length; i++) {
@@ -29,7 +29,7 @@ public class Global extends Alignment{
 						finalAlignment.getSequenceB()[i]);
 			}
 		}
-		return score / 1000f;
+		return String.format("%.4f", (score / 1000f));
 	}
     
 	public void initMatrix() {

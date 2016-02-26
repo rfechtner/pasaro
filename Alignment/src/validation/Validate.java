@@ -17,43 +17,44 @@ import alignmentUtils.SequencePair;
 
 public class Validate {
 
-	public static void createValidation(String pathIn, String pathOut)
-			throws IOException {
-		File input = new File(pathIn);
-		File output = new File(pathOut);
-		FileWriter fw = new FileWriter(output);
-		BufferedReader br = new BufferedReader(new FileReader(input));
-		String line;
-		while ((line = br.readLine()) != null) {
-			if (line.startsWith(">")) {
-				String[] ids = line.replace(">", "").split(" ");
-				String seqA = br.readLine().replaceAll("/", "-");
-				String seqB = br.readLine().replaceAll("/", "-");
-				if (seqA.length() == seqB.length()) {
-					GotohGlobal g = new GotohGlobal(
-							new SequencePair(seqA.replaceAll("-", ""),
-									seqB.replaceAll("-", ""), "", ""),
-							new GapFunction(-8, -1),
-							new ScoringMatrix(
-									"/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
-					g.make();
-					fw.write(line + "\n");
-					fw.write(ids[0] + ": " + seqA + "\n");
-					fw.write(ids[1] + ": " + seqB + "\n");
-					fw.write(ids[0]
-							+ ": "
-							+ String.valueOf(g.getFinalAlignment()
-									.getSequenceA()) + "\n");
-					fw.write(ids[1]
-							+ ": "
-							+ String.valueOf(g.getFinalAlignment()
-									.getSequenceB()) + "\n");
-				}
-			}
-		}
-		fw.close();
-		br.close();
-	}
+
+//	public static void createValidation(String pathIn, String pathOut)
+//			throws IOException {
+//		File input = new File(pathIn);
+//		File output = new File(pathOut);
+//		FileWriter fw = new FileWriter(output);
+//		BufferedReader br = new BufferedReader(new FileReader(input));
+//		String line;
+//		while ((line = br.readLine()) != null) {
+//			if (line.startsWith(">")) {
+//				String[] ids = line.replace(">", "").split(" ");
+//				String seqA = br.readLine().replaceAll("/", "-");
+//				String seqB = br.readLine().replaceAll("/", "-");
+//				if (seqA.length() == seqB.length()) {
+//					GotohGlobal g = new GotohGlobal(
+//							new SequencePair(seqA.replaceAll("-", ""),
+//									seqB.replaceAll("-", ""), "", ""),
+//							new GapFunction(-8, -1),
+//							new ScoringMatrix(
+//									"/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
+//					g.make();
+//					fw.write(line + "\n");
+//					fw.write(ids[0] + ": " + seqA + "\n");
+//					fw.write(ids[1] + ": " + seqB + "\n");
+//					fw.write(ids[0]
+//							+ ": "
+//							+ String.valueOf(g.getFinalAlignment()
+//									.getSequenceA()) + "\n");
+//					fw.write(ids[1]
+//							+ ": "
+//							+ String.valueOf(g.getFinalAlignment()
+//									.getSequenceB()) + "\n");
+//				}
+//			}
+//		}
+//		fw.close();
+//		br.close();
+//	}
 
 	public static void validateFile(String path) throws IOException {
 		File file = new File(path);
@@ -76,6 +77,21 @@ public class Validate {
 			}
 		}
 		br.close();
+	}
+	
+	public static ArrayList<char[]> getRefAlignments(String path) throws IOException {
+		ArrayList<char[]> out = new ArrayList<char[]>();
+		File file = new File(path);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String line;
+		while((line = br.readLine()) != null) {
+			if(line.startsWith(">")) {
+				out.add(br.readLine().split(" ")[1].toCharArray());
+				out.add(br.readLine().split(" ")[1].toCharArray());
+			}
+		}
+		br.close();
+		return out;
 	}
 	
 	public static float[] calcValidation(char[] aRef, char[] bRef, char[] aPre,
@@ -150,14 +166,6 @@ public class Validate {
 		Locale.setDefault(new Locale("US"));
 		// createValidation("/home/b/beckerr/propra/gotoh_testset.txt",
 		// "/home/b/beckerr/Desktop/blosum62-10-2.txt");
-//		float[] s = calcValidation("VBSD--EFG".toCharArray(),
-//				"L-MNOPQR-".toCharArray(), "-VB-SDEFG".toCharArray(),
-//				"LMNOP-QR-".toCharArray());
-//		System.out.println(s[0]);
-//		System.out.println(s[1]);
-//		System.out.println(s[2]);
-//		System.out.println(s[3]);
-//		System.out.println(s[4]);
 		validateFile(args[1]);
 	}
 }

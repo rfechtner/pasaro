@@ -10,7 +10,7 @@ public class Freeshift extends Alignment{
 		super(sequence, gapFunction, scoringMatrix);
 	}
 	
-	public float checkScore() {
+	public String checkScore() {
 		float score = 0;
 		int start = 0;
 		int stop = finalAlignment.getSequenceA().length;
@@ -46,7 +46,7 @@ public class Freeshift extends Alignment{
 						finalAlignment.getSequenceB()[i]);
 			}
 		}
-		return score / 1000f;
+		return String.format("%.4f", (score / 1000f));
 	}
 	
 	public void make() {
