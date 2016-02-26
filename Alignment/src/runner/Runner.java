@@ -42,7 +42,6 @@ public class Runner {
 					case freeshift: al = new GotohFreeshift(sp, gf, sm); break;
 				}
 			}
-			
 			al.make();
 			alignments.add(al);
 		}

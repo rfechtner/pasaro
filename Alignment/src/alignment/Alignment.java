@@ -48,7 +48,7 @@ public abstract class Alignment {
 
 		Graphics2D g = image.createGraphics();
 		g.setPaint(Color.white);
-		g.fillRect ( 0, 0, image.getWidth(), image.getHeight() );
+		g.fillRect ( 0, 0, image.getWidth(), image.getHeight());
 		g.setPaint(Color.black);
 		g.setFont(new Font(Font.MONOSPACED, 0, 12));
 		String row;
@@ -66,6 +66,7 @@ public abstract class Alignment {
 			}
 			for (int j = 0; j < aMatrix.length; j++) {
 					row += String.format("%7s", String.format("%.2f",(aMatrix[j][i] / 1000f)));
+					g.setPaint(Color.black);
 			}
 			g.drawString(row, 0, (i*15+30));
 		}
