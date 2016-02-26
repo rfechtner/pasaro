@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
@@ -29,6 +30,7 @@ public abstract class Alignment {
 		this.sequence = sequence;
 		this.gapFunction = gapFunction;
 		this.scoringMatrix = scoringMatrix;
+		Locale.setDefault(new Locale("US"));
 	}
 
 //	creates the alignment with given sequences
@@ -240,7 +242,7 @@ public abstract class Alignment {
 				b = sequence.getSequenceB()[x] + b;
 			}
 		}
-		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), String.format("%.4f", finalScore).replace(',', '.'));
+		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), String.format("%.4f", finalScore));
 		finalAlignment = out;
 //		printResult();
 	}
@@ -295,7 +297,7 @@ public abstract class Alignment {
 				b = sequence.getSequenceB()[x] + b;
 			}
 		}
-		finalAlignment = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), String.format("%.4f", finalScore).replace(',', '.'));
+		finalAlignment = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), String.format("%.4f", finalScore));
 	}
 
 	public SequencePair getFinalAlignment() {
