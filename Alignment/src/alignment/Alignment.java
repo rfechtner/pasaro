@@ -303,4 +303,16 @@ public abstract class Alignment {
 	public SequencePair getFinalAlignment() {
 		return finalAlignment;
 	}
+	
+	public SequencePair getSequence() {
+		return sequence;
+	}
+	
+	public int[][] getAMatrix(){
+		return aMatrix;
+	}
+	
+	public ArrayList<Integer> getPath(){
+		return path;
+	}
 }

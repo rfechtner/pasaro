@@ -17,45 +17,44 @@ import alignmentUtils.SequencePair;
 
 public class Validate {
 
+	// public static void createValidation(String pathIn, String pathOut)
+	// throws IOException {
+	// File input = new File(pathIn);
+	// File output = new File(pathOut);
+	// FileWriter fw = new FileWriter(output);
+	// BufferedReader br = new BufferedReader(new FileReader(input));
+	// String line;
+	// while ((line = br.readLine()) != null) {
+	// if (line.startsWith(">")) {
+	// String[] ids = line.replace(">", "").split(" ");
+	// String seqA = br.readLine().replaceAll("/", "-");
+	// String seqB = br.readLine().replaceAll("/", "-");
+	// if (seqA.length() == seqB.length()) {
+	// GotohGlobal g = new GotohGlobal(
+	// new SequencePair(seqA.replaceAll("-", ""),
+	// seqB.replaceAll("-", ""), "", ""),
+	// new GapFunction(-8, -1),
+	// new ScoringMatrix(
+	// "/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
+	// g.make();
+	// fw.write(line + "\n");
+	// fw.write(ids[0] + ": " + seqA + "\n");
+	// fw.write(ids[1] + ": " + seqB + "\n");
+	// fw.write(ids[0]
+	// + ": "
+	// + String.valueOf(g.getFinalAlignment()
+	// .getSequenceA()) + "\n");
+	// fw.write(ids[1]
+	// + ": "
+	// + String.valueOf(g.getFinalAlignment()
+	// .getSequenceB()) + "\n");
+	// }
+	// }
+	// }
+	// fw.close();
+	// br.close();
+	// }
 
-//	public static void createValidation(String pathIn, String pathOut)
-//			throws IOException {
-//		File input = new File(pathIn);
-//		File output = new File(pathOut);
-//		FileWriter fw = new FileWriter(output);
-//		BufferedReader br = new BufferedReader(new FileReader(input));
-//		String line;
-//		while ((line = br.readLine()) != null) {
-//			if (line.startsWith(">")) {
-//				String[] ids = line.replace(">", "").split(" ");
-//				String seqA = br.readLine().replaceAll("/", "-");
-//				String seqB = br.readLine().replaceAll("/", "-");
-//				if (seqA.length() == seqB.length()) {
-//					GotohGlobal g = new GotohGlobal(
-//							new SequencePair(seqA.replaceAll("-", ""),
-//									seqB.replaceAll("-", ""), "", ""),
-//							new GapFunction(-8, -1),
-//							new ScoringMatrix(
-//									"/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
-//					g.make();
-//					fw.write(line + "\n");
-//					fw.write(ids[0] + ": " + seqA + "\n");
-//					fw.write(ids[1] + ": " + seqB + "\n");
-//					fw.write(ids[0]
-//							+ ": "
-//							+ String.valueOf(g.getFinalAlignment()
-//									.getSequenceA()) + "\n");
-//					fw.write(ids[1]
-//							+ ": "
-//							+ String.valueOf(g.getFinalAlignment()
-//									.getSequenceB()) + "\n");
-//				}
-//			}
-//		}
-//		fw.close();
-//		br.close();
-//	}
-	
 	public static void paramTuning(String path) throws IOException {
 		ArrayList<char[]> refs = getRefAlignments(path);
 		float sens = 0;
@@ -68,30 +67,37 @@ public class Validate {
 		float covCount = 0;
 		float mseCount = 0;
 		float imseCount = 0;
-		for (int i = 0; i < refs.size(); i+=2) {
-			
-		}	
+		for (int i = 0; i < refs.size(); i += 2) {
+
+		}
 		System.out.println(sens / sensCount);
 		System.out.println(spec / specCount);
 		System.out.println(cov / covCount);
 		System.out.println(mse / mseCount);
-		System.out.println(imse / imseCount);
+		System.out.println(imse);
 	}
-	
+
 	public static void validateFile(String path) throws IOException {
 		File file = new File(path);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String line;
-		while((line = br.readLine()) != null) {
+		while ((line = br.readLine()) != null) {
 			String head = line;
-			if(line.startsWith(">")) {
+			if (line.startsWith(">")) {
 				float[] val = null;
 				String aR = br.readLine();
 				String bR = br.readLine();
 				String aP = br.readLine();
 				String bP = br.readLine();
-				val = calcValidation(aR.split(" ")[1].toCharArray(), bR.split(" ")[1].toCharArray(), aP.split(" ")[1].toCharArray(), bP.split(" ")[1].toCharArray());
-				System.out.println(head + " " + String.format("%.4f", val[0]) + " " + String.format("%.4f", val[1]) + " " + String.format("%.4f", val[2]) + " " + String.format("%.4f", val[3]) + " " + String.format("%.4f", val[4]));
+				val = calcValidation(aR.split(" ")[1].toCharArray(),
+						bR.split(" ")[1].toCharArray(),
+						aP.split(" ")[1].toCharArray(),
+						bP.split(" ")[1].toCharArray());
+				System.out.println(head + " " + String.format("%.4f", val[0])
+						+ " " + String.format("%.4f", val[1]) + " "
+						+ String.format("%.4f", val[2]) + " "
+						+ String.format("%.4f", val[3]) + " "
+						+ String.format("%.4f", val[4]));
 				System.out.println(aR);
 				System.out.println(bR);
 				System.out.println(aP);
@@ -100,14 +106,15 @@ public class Validate {
 		}
 		br.close();
 	}
-	
-	public static ArrayList<char[]> getRefAlignments(String path) throws IOException {
+
+	public static ArrayList<char[]> getRefAlignments(String path)
+			throws IOException {
 		ArrayList<char[]> out = new ArrayList<char[]>();
 		File file = new File(path);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String line;
-		while((line = br.readLine()) != null) {
-			if(line.startsWith(">")) {
+		while ((line = br.readLine()) != null) {
+			if (line.startsWith(">")) {
 				out.add(br.readLine().split(" ")[1].toCharArray());
 				out.add(br.readLine().split(" ")[1].toCharArray());
 			}
@@ -115,13 +122,13 @@ public class Validate {
 		br.close();
 		return out;
 	}
-	
+
 	public static float[] calcValidation(char[] aRef, char[] bRef, char[] aPre,
 			char[] bPre) {
 		float[] validateOut = new float[5];
-		HashMap<Integer, Integer> refMap= new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> refMap = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> preMap = new HashMap<Integer, Integer>();
-		HashMap<Integer, Integer> invRefMap= new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> invRefMap = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> invPreMap = new HashMap<Integer, Integer>();
 		int aliCor = 0;
 		int tem = 0;
@@ -137,9 +144,9 @@ public class Validate {
 				invRefMap.put(tem, tar);
 				tar++;
 				tem++;
-			}else if(aRef[i] != '-'){
+			} else if (aRef[i] != '-') {
 				tem++;
-			}else if(bRef[i] != '-') {
+			} else if (bRef[i] != '-') {
 				tar++;
 			}
 		}
@@ -151,27 +158,28 @@ public class Validate {
 				invPreMap.put(tem, tar);
 				tar++;
 				tem++;
-			}else if(aPre[i] != '-'){
+			} else if (aPre[i] != '-') {
 				tem++;
-			}else if(bPre[i] != '-') {
+			} else if (bPre[i] != '-') {
 				tar++;
 			}
 		}
 		int aliRefTot = refMap.size();
 		int aliPreTot = preMap.size();
 		for (int key : refMap.keySet()) {
-			if(preMap.containsKey(key)) {
+			if (preMap.containsKey(key)) {
 				cov++;
-				if(preMap.get(key) == refMap.get(key)) {
+				if (preMap.get(key) == refMap.get(key)) {
 					aliCor++;
-				}else {
+				} else {
 					shiftCount++;
 					shift += Math.abs(preMap.get(key) - refMap.get(key));
 				}
 			}
 		}
 		for (int key : invRefMap.keySet()) {
-			if(invPreMap.containsKey(key) && invPreMap.get(key) != invRefMap.get(key)) {
+			if (invPreMap.containsKey(key)
+					&& invPreMap.get(key) != invRefMap.get(key)) {
 				invShiftCount++;
 				invShift += Math.abs(invPreMap.get(key) - invRefMap.get(key));
 			}

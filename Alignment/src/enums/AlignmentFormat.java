@@ -1,5 +1,5 @@
 package enums;
 
 public enum AlignmentFormat {
-	scores, ali, html
+	scores, ali, html, json
 }
