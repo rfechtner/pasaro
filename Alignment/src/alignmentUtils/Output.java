@@ -1,49 +1,74 @@
 package alignmentUtils;
 
+import java.util.ArrayList;
+
+import alignment.Alignment;
 import enums.AlignmentFormat;
 
 public class Output {
-	public static void genOutput(SequencePair alignment, AlignmentFormat format){
+	public static void genOutput(ArrayList<Alignment> alignments, AlignmentFormat format){
 		switch(format) {
-			case scores: genScoresOutput(alignment); break;
-			case ali: genAliOutput(alignment); break;
-			case html: genHtmlOutput(alignment); break;
+			case scores: genScoresOutput(alignments); break;
+			case ali: genAliOutput(alignments); break;
+			case html: genHtmlOutput(alignments); break;
+			case json: getJsonOutput(alignments); break;
 		}
 	}
 	
-	private static void genScoresOutput(SequencePair alignment){
-		System.out.println(alignment.getNameA() + " " + alignment.getNameB() + " " + alignment.getScore());
+	private static void genScoresOutput(ArrayList<Alignment> alignments){
+		for (Alignment al : alignments){
+			System.out.println(al.getFinalAlignment().getNameA() + " " + al.getFinalAlignment().getNameB() + " " + al.getFinalAlignment().getScore());
+		}	
 	}
 	
-	private static void genAliOutput(SequencePair alignment){
-		System.out.println(">" + alignment.getNameA() + " " + alignment.getNameB() + " " + alignment.getScore());
-		System.out.println(alignment.getNameA() + ": " + String.copyValueOf(alignment.getSequenceA()));
-		System.out.println(alignment.getNameB() + ": " + String.copyValueOf(alignment.getSequenceB()));
+	private static void genAliOutput(ArrayList<Alignment> alignments){
+		for (Alignment al : alignments){
+			System.out.println(">" + al.getFinalAlignment().getNameA() + " " + al.getFinalAlignment().getNameB() + " " + al.getFinalAlignment().getScore());
+			System.out.println(al.getFinalAlignment().getNameA() + ": " + String.copyValueOf(al.getFinalAlignment().getSequenceA()));
+			System.out.println(al.getFinalAlignment().getNameB() + ": " + String.copyValueOf(al.getFinalAlignment().getSequenceB()));
+		}
 	}
-
-	private static void genHtmlOutput(SequencePair alignment){
-		String chars = "";
+	
+	public static void genHtmlOutput(ArrayList<Alignment> alignments){
+		String head = "<!DOCTYPE html>\n"
+				+ "<head>\n"
+				+ "<title>Alignment results</title>\n"
+				+ "</head>\n"
+				+ "<body>\n"
+				+ "<table>\n";
 		
-		for(int i = 0; i < alignment.getSequenceA().length; i++){
-			String mat = "";
-			if (alignment.getSequenceA()[i] == alignment.getSequenceB()[i]) { mat = "mat"; }
-			else if (alignment.getSequenceA()[i] != '-' && alignment.getSequenceB()[i] != '-') { mat = "sim"; }
-			
-			chars += 	"\t<div class='char " + mat + "'> \n" +
-							"\t\t<div class='SeqA'>" + alignment.getSequenceA()[i] + "</div>\n"+
-							"\t\t<div class='SeqB'>" + alignment.getSequenceB()[i] + "</div>\n"+
-						"\t</div>\n";
+		String body = "</table>\n"
+				+ "</body>";
+		String rows = "";
+		
+		for(Alignment al : alignments ){
+			rows += "<tr>\n"
+					+ "<td>" + al.getFinalAlignment().getNameA() + " vs " + al.getFinalAlignment().getNameB() + "</td>\n"
+					+ "<td>" + String.copyValueOf(al.getFinalAlignment().getSequenceA()) + "<br/>" + String.copyValueOf(al.getFinalAlignment().getSequenceB()) + "</td>\n"
+				    + "</tr>\n";
 		}
 		
-		String html = 	"<div class='alignment'>\n" +
-							"\t<div class='information'>\n" +
-								alignment.getScore() +
-							"\t</div>\n" +
-							"\t<div class='sequences" + alignment.getNameA() + "_" + alignment.getNameB() + "'>\n" +
-							chars +
-							"\t</div>\n" +
-						"</div>\n";
+		String html = head + rows + body;
 		
 		System.out.println(html);
+	}
+	
+	private static void getJsonOutput(ArrayList<Alignment> alignments){
+		String json = "[";
+		
+		int count = 0;
+		for (Alignment al : alignments) {
+			String jsonObj = "{\"id\":" + count + ","
+					+ "\"nameA\":\"" + al.getFinalAlignment().getNameA() + "\","
+					+ "\"nameB\":\"" + al.getFinalAlignment().getNameB() + "\","
+					+ "\"seqA\":\"" + String.copyValueOf(al.getFinalAlignment().getSequenceA()) + "\","
+					+ "\"seqB\":\"" + String.copyValueOf(al.getFinalAlignment().getSequenceB()) + "\"},\n";
+			json += jsonObj;
+			count++;
+		}
+		
+		String jsonFinal = json.substring(0,json.length()-2) + "]";
+		
+		System.out.println(jsonFinal);
 	}
 }

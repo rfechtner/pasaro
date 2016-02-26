@@ -47,10 +47,7 @@ public class Runner {
 			alignments.add(al);
 		}
 		
-		for (Alignment al : alignments){
-			Output.genOutput(al.getFinalAlignment(), p.getFormat());
-		}
-		
-		System.out.println(p.toString());
+		Output.genOutput(alignments, p.getFormat());
+
 	}
 }
