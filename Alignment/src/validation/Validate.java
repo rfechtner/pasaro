@@ -55,7 +55,29 @@ public class Validate {
 //		fw.close();
 //		br.close();
 //	}
-
+	
+	public static void paramTuning(String path) throws IOException {
+		ArrayList<char[]> refs = getRefAlignments(path);
+		float sens = 0;
+		float spec = 0;
+		float cov = 0;
+		float mse = 0;
+		float imse = 0;
+		float sensCount = 0;
+		float specCount = 0;
+		float covCount = 0;
+		float mseCount = 0;
+		float imseCount = 0;
+		for (int i = 0; i < refs.size(); i+=2) {
+			
+		}	
+		System.out.println(sens / sensCount);
+		System.out.println(spec / specCount);
+		System.out.println(cov / covCount);
+		System.out.println(mse / mseCount);
+		System.out.println(imse / imseCount);
+	}
+	
 	public static void validateFile(String path) throws IOException {
 		File file = new File(path);
 		BufferedReader br = new BufferedReader(new FileReader(file));
