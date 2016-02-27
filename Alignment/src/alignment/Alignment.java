@@ -315,4 +315,5 @@ public abstract class Alignment {
 	public ArrayList<Integer> getPath(){
 		return path;
 	}
+	
 }
