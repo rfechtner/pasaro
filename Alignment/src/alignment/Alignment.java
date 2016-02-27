@@ -78,7 +78,44 @@ public abstract class Alignment {
 
 //	calculates score of final alignment
 	public String checkScore() {
-		return null;
+		float score = 0;
+		int start = 0;
+		int stop = finalAlignment.getSequenceA().length;
+		char[] check;
+		if(this instanceof Freeshift || this instanceof Local) {
+		for (int i = 0; i < stop; i++) {
+			if(finalAlignment.getSequenceA()[i] == '-'
+					|| finalAlignment.getSequenceB()[i] == '-') {
+						start++;
+					}else {
+						break;
+					}
+		}
+		for (int i = stop-1; i > 0; i--) {
+			if(finalAlignment.getSequenceA()[i] == '-'
+					|| finalAlignment.getSequenceB()[i] == '-') {
+						stop--;
+					}else {
+						break;
+					}
+		}
+		}
+		for (int i = start; i < stop; i++) {
+			if ((check = finalAlignment.getSequenceA())[i] == '-'
+					|| (check = finalAlignment.getSequenceB())[i] == '-') {
+				int gaps = 1;
+				while (i + 1 < check.length && check[i + 1] == '-') {
+					i++;
+					gaps++;
+				}
+				score += gapFunction.calcPenalty(gaps);
+			} else {
+				score += scoringMatrix.getScore(
+						finalAlignment.getSequenceA()[i],
+						finalAlignment.getSequenceB()[i]);
+			}
+		}
+		return String.format("%.4f", (score / 1000f));
 	}
 
 //	calculates score of global alignment with recursive method
@@ -126,7 +163,6 @@ public abstract class Alignment {
 	public void calcGotoh(int i, int j) {
 		int opI = aMatrix[i][j - 1] + gapFunction.calcPenalty(1);
 		int extI = iMatrix[i][j - 1] + gapFunction.getGapExtend();
-//		System.out.println(iMatrix[i][j - 1] + " " + gapFunction.getGapExtend() + " " + extI);
 		iMatrix[i][j] = Math.max(opI, extI);
 		int opD = aMatrix[i - 1][j] + gapFunction.calcPenalty(1);
 		int extD = dMatrix[i - 1][j] + gapFunction.getGapExtend();
@@ -244,7 +280,6 @@ public abstract class Alignment {
 		}
 		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), String.format("%.4f", finalScore));
 		finalAlignment = out;
-//		printResult();
 	}
 
 //	does traceback linear gap cost alignments

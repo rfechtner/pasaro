@@ -1,6 +1,7 @@
 package validation;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -17,44 +18,32 @@ import alignmentUtils.SequencePair;
 
 public class Validate {
 
-	// public static void createValidation(String pathIn, String pathOut)
-	// throws IOException {
-	// File input = new File(pathIn);
-	// File output = new File(pathOut);
-	// FileWriter fw = new FileWriter(output);
-	// BufferedReader br = new BufferedReader(new FileReader(input));
-	// String line;
-	// while ((line = br.readLine()) != null) {
-	// if (line.startsWith(">")) {
-	// String[] ids = line.replace(">", "").split(" ");
-	// String seqA = br.readLine().replaceAll("/", "-");
-	// String seqB = br.readLine().replaceAll("/", "-");
-	// if (seqA.length() == seqB.length()) {
-	// GotohGlobal g = new GotohGlobal(
-	// new SequencePair(seqA.replaceAll("-", ""),
-	// seqB.replaceAll("-", ""), "", ""),
-	// new GapFunction(-8, -1),
-	// new ScoringMatrix(
-	// "/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
-	// g.make();
-	// fw.write(line + "\n");
-	// fw.write(ids[0] + ": " + seqA + "\n");
-	// fw.write(ids[1] + ": " + seqB + "\n");
-	// fw.write(ids[0]
-	// + ": "
-	// + String.valueOf(g.getFinalAlignment()
-	// .getSequenceA()) + "\n");
-	// fw.write(ids[1]
-	// + ": "
-	// + String.valueOf(g.getFinalAlignment()
-	// .getSequenceB()) + "\n");
-	// }
-	// }
-	// }
-	// fw.close();
-	// br.close();
-	// }
-
+//	used to create tsv files for validation statistics
+	public static void formatFile(String path, String out, int i) throws IOException {
+		File file = new File(path);
+		File fileOut = new File(out);
+		FileWriter fw = new FileWriter(fileOut);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		ArrayList<String[]> th = new ArrayList<String[]>();
+		String line;
+		while((line = br.readLine()) != null) {
+			String[] par = line.split(" ");
+			th.add(par);
+		}
+		fw.write(String.format("%.1f",Float.parseFloat(th.get(0)[0])) + "\t");
+		fw.write(String.format("%.1f",Float.parseFloat(th.get(0)[1])) + "\t");
+		fw.write(String.format("%.4f",(Float.parseFloat(th.get(0)[i]))/657) + "\n");
+		for (int j = 1; j < th.size(); j++) {
+			float a = Float.parseFloat(th.get(j)[i]);
+			float b = Float.parseFloat(th.get(j-1)[i]);
+			fw.write(String.format("%.1f",Float.parseFloat(th.get(j)[0])) + "\t");
+			fw.write(String.format("%.1f",Float.parseFloat(th.get(j)[1])) + "\t");
+			fw.write(String.format("%.4f",(a-b)/657) + "\n");
+		}
+		fw.close();
+	}
+	
+//	used to validate various gap open adn gap extend settings against HOMSTRAD databank
 	public static void paramTuning(String path) throws IOException {
 		ArrayList<char[]> refs = getRefAlignments(path);
 		float sens = 0;
@@ -62,21 +51,42 @@ public class Validate {
 		float cov = 0;
 		float mse = 0;
 		float imse = 0;
-		float sensCount = 0;
-		float specCount = 0;
-		float covCount = 0;
-		float mseCount = 0;
-		float imseCount = 0;
-		for (int i = 0; i < refs.size(); i += 2) {
-
-		}
-		System.out.println(sens / sensCount);
-		System.out.println(spec / specCount);
-		System.out.println(cov / covCount);
-		System.out.println(mse / mseCount);
-		System.out.println(imse);
+		File file = new File("/home/b/beckerr/propra/gotoh_testset_tuning.txt");
+		FileWriter fw;
+		for (float j = 0; j > -10; j -= 0.1) {
+			for (float j2 = -24; j2 < -4; j2 += 0.2) {
+				for (int i = 0; i < refs.size(); i += 2) {
+					String seqA = String.valueOf(refs.get(i));
+					String seqB = String.valueOf(refs.get(i + 1));
+					GotohGlobal a = new GotohGlobal(
+							new SequencePair(seqA.replaceAll("-", ""),
+									seqB.replaceAll("-", ""), "", ""),
+							new GapFunction(j2, j),
+							new ScoringMatrix(
+									"/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
+					a.make();
+					float[] vals = calcValidation(refs.get(i), refs.get(i + 1),
+							a.getFinalAlignment().getSequenceA(), a
+									.getFinalAlignment().getSequenceB());
+					sens += vals[0];
+					spec += vals[1];
+					cov += vals[2];
+					mse += vals[3];
+					imse += vals[4];
+				}
+				fw = new FileWriter(file, true);
+				fw.write(j2 + " " + j + " " + sens + " " + spec + " " + cov + " " + mse + " " + imse + "\n");
+				fw.close();
+				sens = 0;
+				spec = 0;
+				cov = 0;
+				mse = 0;
+				imse = 0;
+			}
+		}		
 	}
 
+//	validates given file containing reference and candidate alignments
 	public static void validateFile(String path) throws IOException {
 		File file = new File(path);
 		BufferedReader br = new BufferedReader(new FileReader(file));
@@ -115,14 +125,15 @@ public class Validate {
 		String line;
 		while ((line = br.readLine()) != null) {
 			if (line.startsWith(">")) {
-				out.add(br.readLine().split(" ")[1].toCharArray());
-				out.add(br.readLine().split(" ")[1].toCharArray());
+				out.add(br.readLine().toCharArray());
+				out.add(br.readLine().toCharArray());
 			}
 		}
 		br.close();
 		return out;
 	}
 
+//	calculates validation values for given candidate and reference alignment
 	public static float[] calcValidation(char[] aRef, char[] bRef, char[] aPre,
 			char[] bPre) {
 		float[] validateOut = new float[5];
@@ -134,6 +145,7 @@ public class Validate {
 		int tem = 0;
 		int tar = 0;
 		int cov = 0;
+		int invCov = 0;
 		int shiftCount = 0;
 		int shift = 0;
 		int invShiftCount = 0;
@@ -164,31 +176,42 @@ public class Validate {
 				tar++;
 			}
 		}
-		int aliRefTot = refMap.size();
-		int aliPreTot = preMap.size();
+		int aliPreTot = refMap.size();
+		int aliRefTot = preMap.size();
 		for (int key : refMap.keySet()) {
 			if (preMap.containsKey(key)) {
 				cov++;
-				if (preMap.get(key) == refMap.get(key)) {
+				int a = preMap.get(key);
+				int b = refMap.get(key);
+				if (a == b) {
 					aliCor++;
 				} else {
-					shiftCount++;
-					shift += Math.abs(preMap.get(key) - refMap.get(key));
+					
+					shift += Math.abs(a - b);
 				}
 			}
 		}
 		for (int key : invRefMap.keySet()) {
-			if (invPreMap.containsKey(key)
-					&& invPreMap.get(key) != invRefMap.get(key)) {
-				invShiftCount++;
-				invShift += Math.abs(invPreMap.get(key) - invRefMap.get(key));
+			if (invPreMap.containsKey(key)) {
+				invCov++;
+				int a = invPreMap.get(key);
+				int b = invRefMap.get(key);	
+				if(a != b) {
+	
+				invShift += Math.abs(a - b);
 			}
+		}
 		}
 		validateOut[0] = aliCor / (float) aliRefTot;
 		validateOut[1] = aliCor / (float) aliPreTot;
 		validateOut[2] = cov / (float) aliPreTot;
-		validateOut[3] = shift / (float) shiftCount;
-		validateOut[4] = invShift / (float) invShiftCount;
+		if (cov == 0) {
+			validateOut[3] = 0;
+			validateOut[4] = 0;
+		} else {
+			validateOut[3] = shift / (float) cov;
+			validateOut[4] = invShift / (float) invCov;
+		}
 		return validateOut;
 	}
 
@@ -196,6 +219,8 @@ public class Validate {
 		Locale.setDefault(new Locale("US"));
 		// createValidation("/home/b/beckerr/propra/gotoh_testset.txt",
 		// "/home/b/beckerr/Desktop/blosum62-10-2.txt");
-		validateFile(args[1]);
+//		 validateFile(args[1]);
+//		paramTuning(args[1]);
+		formatFile("/home/b/beckerr/propra/gotoh_testset_tuning.txt", "/home/b/beckerr/propra/imse.tsv", 6);
 	}
 }
