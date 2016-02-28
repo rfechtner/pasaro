@@ -1,8 +1,6 @@
 package runner;
 
 import java.util.ArrayList;
-import java.util.Locale;
-
 import alignment.Alignment;
 import alignment.Freeshift;
 import alignment.Global;
@@ -15,6 +13,7 @@ import alignmentUtils.Output;
 import alignmentUtils.ScoringMatrix;
 import alignmentUtils.SequencePair;
 import alignmentUtils.SequenceParser;
+import parameterUtils.ParamException;
 import parameterUtils.Params;
 
 public class Runner {
@@ -53,7 +52,17 @@ public class Runner {
 			}
 		}
 		
-		Output.genOutput(alignments, p.getFormat());
+		if(p.getDpmatrices() != null){
+			for(Alignment al : alignments){
+				try {
+					al.dpMatrices(p.getDpmatrices());
+				} catch (Exception e) {
+					ParamException.printHelp();
+				}
+			}
+		}
+		
+		Output.genOutput(alignments, p.getFormat(), p.getMode());
 
 	}
 }
