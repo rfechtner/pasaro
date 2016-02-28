@@ -30,7 +30,6 @@ public abstract class Alignment {
 		this.sequence = sequence;
 		this.gapFunction = gapFunction;
 		this.scoringMatrix = scoringMatrix;
-		Locale.setDefault(new Locale("US"));
 	}
 
 //	creates the alignment with given sequences
@@ -43,11 +42,10 @@ public abstract class Alignment {
 	public void dpMatrices(String dir) throws IOException {
 		int sizeX = (sequence.getSequenceA().length+2) * 50;
 		int sizeY = (sequence.getSequenceB().length+3) * 15;
-		String path = dir+sequence.getNameA()+"_"+sequence.getNameB()+ ".png";
+		String path = dir+sequence.getNameA()+"_"+sequence.getNameB()+ "_matrix.png";
 		File file = new File(path);
 		file.createNewFile();
 		BufferedImage image = new BufferedImage(sizeX, sizeY, BufferedImage.TYPE_INT_ARGB);
-
 		Graphics2D g = image.createGraphics();
 		g.setPaint(Color.white);
 		g.fillRect ( 0, 0, image.getWidth(), image.getHeight());
@@ -77,7 +75,7 @@ public abstract class Alignment {
 	}
 
 //	calculates score of final alignment
-	public String checkScore() {
+	public float checkScore() {
 		float score = 0;
 		int start = 0;
 		int stop = finalAlignment.getSequenceA().length;
@@ -115,36 +113,24 @@ public abstract class Alignment {
 						finalAlignment.getSequenceB()[i]);
 			}
 		}
-		return String.format("%.4f", (score / 1000f));
+		return score / 1000f;
 	}
 
 //	calculates score of global alignment with recursive method
-	public float recScore(int i, int j) {
+	public float recScore(String a, String b) {
+		if(a.length() == 0 && b.length() == 0) return 0;
 		float gap1;
 		float gap2;
 		float match;
-		if (i == 0 && j == 0) {
-			return 0;
-		} else {
-			if (i == 0) {
-				gap1 = Integer.MIN_VALUE;
-			} else {
-				gap1 = recScore(i - 1, j) + gapFunction.calcPenalty(1);
-			}
-			if (j == 0) {
-				gap2 = Integer.MIN_VALUE;
-			} else {
-				gap2 = recScore(i, j - 1) + gapFunction.calcPenalty(1);
-			}
-			if (i != 0 && j != 0) {
-				match = recScore(i - 1, j - 1)
-						+ scoringMatrix.getScore(
-								sequence.getSequenceA()[i - 1],
-								sequence.getSequenceB()[j - 1]);
-			} else {
-				match = Integer.MIN_VALUE;
-			}
-		}
+		if(a.length() == 0) gap1 = Integer.MIN_VALUE/2;
+		else gap1 = recScore(a.substring(0, a.length()-1), b) + gapFunction.calcPenalty(1);
+		
+		if(b.length() == 0) gap2 = Integer.MIN_VALUE/2;
+		else gap2 = recScore(a, b.substring(0, b.length()-1)) + gapFunction.calcPenalty(1);
+		
+		if(a.length() != 0 && b.length() != 0) match = recScore(a.substring(0, a.length()-1), b.substring(0,b.length()-1)) + scoringMatrix.getScore(a.charAt(a.length()-1), b.charAt(b.length()-1));	
+		else match = Integer.MIN_VALUE/2;
+		
 		return Math.max(match, Math.max(gap1, gap2));
 	}
 
@@ -173,16 +159,6 @@ public abstract class Alignment {
 		int ins = iMatrix[i][j];
 		int del = dMatrix[i][j];
 		aMatrix[i][j] = Math.max(match, Math.max(ins, del));
-	}
-
-	public void printResult() {
-		System.out.println(finalAlignment.getScore());
-		System.out.println(finalAlignment.getSequenceA());
-		System.out.println(finalAlignment.getSequenceB());
-		for (int i = 0; i < path.size(); i++) {
-			System.out.print(path.get(i) + " ");
-		}
-		System.out.print("\n");
 	}
 
 //	prints dp-matrix to standart out
@@ -226,19 +202,19 @@ public abstract class Alignment {
 
 //	does traceback for gotoh alignments
 	public void gotohBacktrack(int i, int j, int end) {
-		String a = "";
-		String b = "";
+		StringBuffer a = new StringBuffer();
+		StringBuffer b = new StringBuffer();
 		float finalScore = aMatrix[i][j] / 1000f;
 		if(i != sequence.getSequenceA().length) {
 			for(int x = i; x < sequence.getSequenceA().length; x++) {
-				a += sequence.getSequenceA()[x];
-				b += "-";
+				a.append(sequence.getSequenceA()[x]);
+				b.append("-");
 			}
 		}
 		if(j != sequence.getSequenceB().length) {
 			for(int x = j; x < sequence.getSequenceB().length; x++) {
-				a += "-";
-				b += sequence.getSequenceB()[x];
+				a.append("-");
+				b.append(sequence.getSequenceB()[x]);
 			}
 		}
 		while(i != 0 && j != 0) {
@@ -250,53 +226,53 @@ public abstract class Alignment {
 			if(aMatrix[i][j] == iMatrix[i][j]) {
 				do {
 					j--;
-					a = "-" + a;
-					b = sequence.getSequenceB()[j] + b;
+					a.insert(0, "-");
+					b.insert(0, sequence.getSequenceB()[j]);
 				}while(aMatrix[i][j] + gapFunction.calcPenalty(1) != iMatrix[i][j+1]);
 			}else if(aMatrix[i][j] == dMatrix[i][j]) {
 				do {
 					i--;
-					a = sequence.getSequenceA()[i] + a;
-					b = "-" + b;
+					a.insert(0, sequence.getSequenceA()[i]);
+					b.insert(0, "-");
 				}while(aMatrix[i][j] + gapFunction.calcPenalty(1) != dMatrix[i+1][j]);
 			}else {
 				i = i-1;
 				j = j-1;
-				a = sequence.getSequenceA()[i] + a;
-				b = sequence.getSequenceB()[j] + b;
+				a.insert(0, sequence.getSequenceA()[i]);
+				b.insert(0, sequence.getSequenceB()[j]);
 			}
 		}
 		if(i != 0) {
 			for(int x = i-1; x >= 0; x--) {
-				a = sequence.getSequenceA()[x] + a;
-				b = "-" + b;
+				a.insert(0, sequence.getSequenceA()[x]);
+				b.insert(0, "-");
 			}
 		}
 		if (j != 0){
 			for(int x = j-1; x >= 0; x--) {
-				a = "-" + a;
-				b = sequence.getSequenceB()[x] + b;
+				a.insert(0, "-");
+				b.insert(0, sequence.getSequenceB()[x]);
 			}
 		}
-		SequencePair out = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), String.format("%.4f", finalScore));
+		SequencePair out = new SequencePair(a.toString(), b.toString(), sequence.getNameA(), sequence.getNameB(), finalScore);
 		finalAlignment = out;
 	}
 
 //	does traceback linear gap cost alignments
 	public void backtrack(int i, int j, int end) {
-		String a = "";
-		String b = "";
+		StringBuffer a = new StringBuffer();
+		StringBuffer b = new StringBuffer();
 		float finalScore = aMatrix[i][j] / 1000f;
 		if(i != sequence.getSequenceA().length) {
 			for(int x = i; x < sequence.getSequenceA().length; x++) {
-				a += sequence.getSequenceA()[x];
-				b += "-";
+				a.append(sequence.getSequenceA()[x]);
+				b.append("-");
 			}
 		}
 		if(j != sequence.getSequenceB().length) {
 			for(int x = j; x < sequence.getSequenceB().length; x++) {
-				a += "-";
-				b += sequence.getSequenceB()[x];
+				a.append("-");
+				b.append(sequence.getSequenceB()[x]);
 			}
 		}
 		while(i != 0 && j != 0) {
@@ -307,32 +283,32 @@ public abstract class Alignment {
 			path.add(j);
 			if(aMatrix[i][j] == aMatrix[i-1][j] + gapFunction.calcPenalty(1)){
 				i = i-1;
-				a = sequence.getSequenceA()[i] + a;
-				b = "-" + b;
+				a.insert(0, sequence.getSequenceA()[i]);
+				b.insert(0, "-");
 			}else if(aMatrix[i][j] == aMatrix[i][j-1] + gapFunction.calcPenalty(1)) {
 				j = j-1;
-				a = "-" + a;
-				b = sequence.getSequenceB()[j] + b;
+				a.insert(0, "-");
+				b.insert(0, sequence.getSequenceB()[j]);
 			}else {
 				i = i-1;
 				j = j-1;
-				a = sequence.getSequenceA()[i] + a;
-				b = sequence.getSequenceB()[j] + b;
+				a.insert(0, sequence.getSequenceA()[i]);
+				b.insert(0, sequence.getSequenceB()[j]);
 			}
 		}
 		if(i != 0) {
 			for(int x = i-1; x >= 0; x--) {
-				a = sequence.getSequenceA()[x] + a;
-				b = "-" + b;
+				a.insert(0, sequence.getSequenceA()[x]);
+				b.insert(0, "-");
 			}
 		}
 		if (j != 0){
 			for(int x = j-1; x >= 0; x--) {
-				a = "-" + a;
-				b = sequence.getSequenceB()[x] + b;
+				a.insert(0, "-");
+				b.insert(0, sequence.getSequenceB()[x]);
 			}
 		}
-		finalAlignment = new SequencePair(a, b, sequence.getNameA(), sequence.getNameB(), String.format("%.4f", finalScore));
+		finalAlignment = new SequencePair(a.toString(), b.toString(), sequence.getNameA(), sequence.getNameB(), finalScore);
 	}
 
 	public SequencePair getFinalAlignment() {

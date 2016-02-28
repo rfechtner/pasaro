@@ -45,7 +45,7 @@ public class Runner {
 			}
 			al.make();
 			if(p.isCheck()) {
-				if(!al.getFinalAlignment().getScore().equals(al.checkScore())) {
+				if(!(al.getFinalAlignment().getScore() == al.checkScore())) {
 					alignments.add(al);
 				}
 			}else {

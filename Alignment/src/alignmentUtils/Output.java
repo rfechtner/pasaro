@@ -1,6 +1,7 @@
 package alignmentUtils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import alignment.Alignment;
 import enums.AlignmentFormat;
@@ -17,13 +18,13 @@ public class Output {
 	
 	private static void genScoresOutput(ArrayList<Alignment> alignments){
 		for (Alignment al : alignments){
-			System.out.println(al.getFinalAlignment().getNameA() + " " + al.getFinalAlignment().getNameB() + " " + al.getFinalAlignment().getScore());
+			System.out.println(al.getFinalAlignment().getNameA() + " " + al.getFinalAlignment().getNameB() + " " + String.format(Locale.US, "%.4f", al.getFinalAlignment().getScore()));
 		}	
 	}
 	
 	private static void genAliOutput(ArrayList<Alignment> alignments){
 		for (Alignment al : alignments){
-			System.out.println(">" + al.getFinalAlignment().getNameA() + " " + al.getFinalAlignment().getNameB() + " " + al.getFinalAlignment().getScore());
+			System.out.println(">" + al.getFinalAlignment().getNameA() + " " + al.getFinalAlignment().getNameB() + " " + String.format(Locale.US, "%.4f", al.getFinalAlignment().getScore()));
 			System.out.println(al.getFinalAlignment().getNameA() + ": " + String.copyValueOf(al.getFinalAlignment().getSequenceA()));
 			System.out.println(al.getFinalAlignment().getNameB() + ": " + String.copyValueOf(al.getFinalAlignment().getSequenceB()));
 		}
