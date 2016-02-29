@@ -36,6 +36,7 @@ public class Output {
 		String head = "<!DOCTYPE html>\n"
 				+ "<head>\n"
 				+ "<title>Alignment results</title>\n"
+				+ "<style>table td{width: 200px; display: inline-block; white-space: nowrap;} .double { overflow-x: auto; width: 400px !important;}</style>"
 				+ "</head>\n"
 				+ "<body>\n"
 				+ "<table>\n"
@@ -87,22 +88,22 @@ public class Output {
 			
 			rows += "<tr>\n"
 					+ "<td>Alignment length</td>"
-					+ "<td colspan='2'>" + alignmentLength + "</td>\n"
+					+ "<td colspan='2' class='double'>" + alignmentLength + "</td>\n"
 				    + "</tr>\n";
 			
 			rows += "<tr>\n"
 					+ "<td>No. of matches</td>"
-					+ "<td colspan='2'>" + matches + "</td>\n"
+					+ "<td colspan='2' class='double'>" + matches + "</td>\n"
 				    + "</tr>\n";
 			
 			rows += "<tr>\n"
 					+ "<td>% Identity</td>"
-					+ "<td colspan='2'>" + identity + "</td>\n"
+					+ "<td colspan='2' class='double'>" + identity + "</td>\n"
 				    + "</tr>\n";
 			
 			rows += "<tr>\n"
 					+ "<td>Alignment</td>"
-					+ "<td colspan='2'>" + String.copyValueOf(al.getFinalAlignment().getSequenceA()) + "<br/>" + String.copyValueOf(al.getFinalAlignment().getSequenceB()) + "</td>\n"
+					+ "<td colspan='2' class='double' style='height: 50px;'>" + String.copyValueOf(al.getFinalAlignment().getSequenceA()) + "<br/>" + String.copyValueOf(al.getFinalAlignment().getSequenceB()) + "</td>\n"
 				    + "</tr>\n";
 			
 			rows += "<tr>\n"
