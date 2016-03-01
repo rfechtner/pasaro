@@ -7,10 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
-
 import javax.imageio.ImageIO;
-
 import alignmentUtils.GapFunction;
 import alignmentUtils.ScoringMatrix;
 import alignmentUtils.SequencePair;
