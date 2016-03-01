@@ -13,6 +13,7 @@ import alignmentUtils.Output;
 import alignmentUtils.ScoringMatrix;
 import alignmentUtils.SequencePair;
 import alignmentUtils.SequenceParser;
+import enums.AlignmentFormat;
 import parameterUtils.ParamException;
 import parameterUtils.Params;
 
@@ -25,7 +26,16 @@ public class Runner {
 		GapFunction gf = new GapFunction(p.getGo(), p.getGe());
 		ArrayList<SequencePair> sequencePairs = SequenceParser.parseSeq(p.getSeqlib(), p.getPairs());
 		
-		ArrayList<Alignment> alignments = new ArrayList<Alignment>();
+		int count;
+		// Aufgrung von Memory out of Bounce Exception herausgenommen
+		// ArrayList<Alignment> alignments = new ArrayList<Alignment>();
+		
+		// Musste hinzugefügt werden um den "header" für html und Json outputs zu genieren
+		switch(p.getFormat()){
+			case html: Output.printHtmlHeader(); break;
+			case json: count = sequencePairs.size(); Output.printJsonStart(count); break;
+			default: break;
+		}
 		
 		for ( SequencePair sp : sequencePairs ){
 			Alignment al = null;
@@ -43,26 +53,40 @@ public class Runner {
 				}
 			}
 			al.make();
-			if(p.isCheck()) {
-				if(!(al.getFinalAlignment().getScore() == al.checkScore())) {
-					alignments.add(al);
-				}
-			}else {
-				alignments.add(al);
-			}
-		}
-		
-		if(p.getDpmatrices() != null){
-			for(Alignment al : alignments){
+			
+			// Moved in here
+			if(p.getDpmatrices() != null){
 				try {
 					al.dpMatrices(p.getDpmatrices());
 				} catch (Exception e) {
 					ParamException.printHelp();
 				}
 			}
+			
+			if(p.isCheck()) {
+				if(!(al.getFinalAlignment().getScore() == al.checkScore())) {
+					Output.genOutput(al, p.getFormat(), p.getMode());
+					//alignments.add(al);
+				}
+			}else {
+				Output.genOutput(al, p.getFormat(), p.getMode());
+				//alignments.add(al);
+			}
 		}
 		
-		Output.genOutput(alignments, p.getFormat(), p.getMode());
+		// Moved
+//		if(p.getDpmatrices() != null){
+//			for(Alignment al : alignments){
+//				try {
+//					al.dpMatrices(p.getDpmatrices());
+//				} catch (Exception e) {
+//					ParamException.printHelp();
+//				}
+//			}
+//		}
+		
+		//Output.genOutput(alignments, p.getFormat(), p.getMode());
 
+		if(p.getFormat() == AlignmentFormat.html) Output.printHtmlEnd();
 	}
 }

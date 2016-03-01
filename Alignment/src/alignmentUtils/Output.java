@@ -8,31 +8,33 @@ import enums.AlignmentFormat;
 import enums.AlignmentType;
 
 public class Output {
-	public static void genOutput(ArrayList<Alignment> alignments, AlignmentFormat format, AlignmentType type){
+	private static int jsonCount = 0;
+	private static int jsonMax = 0;
+	
+	public static void genOutput(Alignment alignment, AlignmentFormat format, AlignmentType type){
 		switch(format) {
-			case scores: genScoresOutput(alignments); break;
-			case ali: genAliOutput(alignments); break;
-			case html: genHtmlOutput(alignments, type); break;
-			case json: getJsonOutput(alignments, type); break;
+			case scores: genScoresOutput(alignment); break;
+			case ali: genAliOutput(alignment); break;
+			case html: genHtmlOutput(alignment, type); break;
+			case json: getJsonOutput(alignment, type); break;
 		}
 	}
 	
-	private static void genScoresOutput(ArrayList<Alignment> alignments){
-		for (Alignment al : alignments){
+	private static void genScoresOutput(Alignment al){
+		//for (Alignment al : alignments){
 			System.out.println(al.getFinalAlignment().getNameA() + " " + al.getFinalAlignment().getNameB() + " " + String.format(Locale.US, "%.4f", al.getFinalAlignment().getScore()));
-		}	
+		//}	
 	}
 	
-	private static void genAliOutput(ArrayList<Alignment> alignments){
-		for (Alignment al : alignments){
+	private static void genAliOutput(Alignment al){
+		//for (Alignment al : alignments){
 			System.out.println(">" + al.getFinalAlignment().getNameA() + " " + al.getFinalAlignment().getNameB() + " " + String.format(Locale.US, "%.4f", al.getFinalAlignment().getScore()));
 			System.out.println(al.getFinalAlignment().getNameA() + ": " + String.copyValueOf(al.getFinalAlignment().getSequenceA()));
 			System.out.println(al.getFinalAlignment().getNameB() + ": " + String.copyValueOf(al.getFinalAlignment().getSequenceB()));
-		}
+		//}
 	}
 	
-	public static void genHtmlOutput(ArrayList<Alignment> alignments, AlignmentType type){
-		
+	public static void printHtmlHeader(){
 		String head = "<!DOCTYPE html>\n"
 				+ "<head>\n"
 				+ "<title>Alignment results</title>\n"
@@ -46,12 +48,39 @@ public class Output {
 				+ "<th>Sequence B</th>\n"
 				+ "</tr>";
 		
-		String body = "</table>\n"
+		System.out.print(head);
+	}
+	
+	public static void printHtmlEnd(){
+		String end = "</table>\n"
 				+ "</body>";
 		
-		String rows = "";
+		System.out.print(end);
+	}
+	
+	// Statt ArrayList<Alignment> nurnoch ein ALignment
+	public static void genHtmlOutput(Alignment al, AlignmentType type){
 		
-		for(Alignment al : alignments ){
+		// Obsolete
+//		String head = "<!DOCTYPE html>\n"
+//				+ "<head>\n"
+//				+ "<title>Alignment results</title>\n"
+//				+ "<style>table td{width: 200px; display: inline-block; white-space: nowrap;} .double { overflow-x: auto; width: 400px !important;}</style>"
+//				+ "</head>\n"
+//				+ "<body>\n"
+//				+ "<table>\n"
+//				+ "<tr>\n"
+//				+ "<th></th>\n"
+//				+ "<th>Sequence A</th>\n"
+//				+ "<th>Sequence B</th>\n"
+//				+ "</tr>";
+		
+//		String body = "</table>\n"
+//				+ "</body>";
+		
+		String row = "";
+		
+		//for(Alignment al : alignments ){
 			int matches = 0;
 			int alignmentLength = 0;
 			ArrayList<Integer> path = al.getPath();
@@ -74,55 +103,63 @@ public class Output {
 			
 			Locale.setDefault(new Locale("US"));
 			
-			rows += "<tr>\n"
+			row += "<tr>\n"
 					+ "<td>Sequence names</td>"
 					+ "<td>" + al.getFinalAlignment().getNameA() + "</td>\n"
 					+ "<td>" + al.getFinalAlignment().getNameA() + "</td>\n"
 				    + "</tr>\n";
 			
-			rows += "<tr>\n"
+			row += "<tr>\n"
 					+ "<td>Sequence lenghts</td>"
 					+ "<td>" + seqLengthA + "</td>\n"
 					+ "<td>" + seqLengthB + "</td>\n"
 				    + "</tr>\n";
 			
-			rows += "<tr>\n"
+			row += "<tr>\n"
 					+ "<td>Alignment length</td>"
 					+ "<td colspan='2' class='double'>" + alignmentLength + "</td>\n"
 				    + "</tr>\n";
 			
-			rows += "<tr>\n"
+			row += "<tr>\n"
 					+ "<td>No. of matches</td>"
 					+ "<td colspan='2' class='double'>" + matches + "</td>\n"
 				    + "</tr>\n";
 			
-			rows += "<tr>\n"
+			row += "<tr>\n"
 					+ "<td>% Identity</td>"
 					+ "<td colspan='2' class='double'>" + identity + "</td>\n"
 				    + "</tr>\n";
 			
-			rows += "<tr>\n"
+			row += "<tr>\n"
 					+ "<td>Alignment</td>"
 					+ "<td colspan='2' class='double' style='height: 50px;'>" + String.copyValueOf(al.getFinalAlignment().getSequenceA()) + "<br/>" + String.copyValueOf(al.getFinalAlignment().getSequenceB()) + "</td>\n"
 				    + "</tr>\n";
 			
-			rows += "<tr>\n"
+			row += "<tr>\n"
 					+ "<td colspan='3'> - </td>\n"
 				    + "</tr>\n";
 			
-		}
+		//}
 
-		String html = head + rows + body;
+		//String html = head + rows + body;
 		
-		System.out.println(html);
+		//System.out.println(html);
+		
+		System.out.print(row);
 	}
 	
-	private static void getJsonOutput(ArrayList<Alignment> alignments, AlignmentType type){
+	public static void printJsonStart(int count){
+		System.out.print("[");
+		jsonMax = count;
+	}
+	
+	private static void getJsonOutput(Alignment al, AlignmentType type){
 		StringBuilder json = new StringBuilder();
-		json.append("[");
 		
-		int count = 0;
-		for (Alignment al : alignments) {
+		//json.append("[");
+		
+		//int count = 0;
+		//for (Alignment al : alignments) {
 			int matches = 0;
 			int alignmentLength = 0;
 			ArrayList<Integer> path = al.getPath();
@@ -148,9 +185,11 @@ public class Output {
 	
 			StringBuilder sb = new StringBuilder();
 			sb.append("{\"id\":");
-			sb.append(count);
+			sb.append(jsonCount);
 			sb.append(",\"matches\":");
 			sb.append(matches);
+			sb.append(",\"score\":");
+			sb.append(al.getFinalAlignment().getScore());
 			sb.append(",\"identity\":");
 			sb.append(ident);
 			sb.append(",\"nameA\":\"");
@@ -165,16 +204,25 @@ public class Output {
 			sb.append(String.copyValueOf(al.getFinalAlignment().getSequenceA()));
 			sb.append("\",\"seqB\":\"");
 			sb.append(String.copyValueOf(al.getFinalAlignment().getSequenceB()));
+			sb.append("\",\"seqAoriginal\":\"");
+			sb.append(String.copyValueOf(al.getSequence().getSequenceA()));
+			sb.append("\",\"seqBoriginal\":\"");
+			sb.append(String.copyValueOf(al.getSequence().getSequenceB()));
 			sb.append("\",\"lengthAli\":");
 			sb.append(alignmentLength);
 			sb.append("},\n");
 			
 			json.append(sb);
-			count++;
+			jsonCount++;
+		//}
+		String jsonFinal;
+		
+		if (jsonCount == jsonMax) {
+			jsonFinal = json.substring(0,json.length()-2) + "]";
+		} else {
+			jsonFinal = json.toString();
 		}
 		
-		String jsonFinal = json.substring(0,json.length()-2) + "]";
-		
-		System.out.println(jsonFinal);
+		System.out.print(jsonFinal);
 	}
 }
