@@ -29,5 +29,6 @@ public class ParamException extends Exception{
 	
 	public static void printHelp(){
 		System.out.println(helpText);
+		System.exit(1);
 	};
 }

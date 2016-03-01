@@ -15,6 +15,7 @@ public class FixedPoint extends Alignment{
 	private SequencePair trail;
 	private int a;
 	private int b;
+	
 	public FixedPoint(SequencePair sequence, GapFunction gapFunction, ScoringMatrix scoringMatrix, int a, int b) {
 		super(sequence, gapFunction, scoringMatrix);
 		lead = new SequencePair(String.valueOf(sequence.getSequenceA()).substring(0,a), String.valueOf(sequence.getSequenceB()).substring(0,b), "", "");
@@ -34,7 +35,7 @@ public class FixedPoint extends Alignment{
 				sequence.getNameA(), sequence.getNameB(), fixedScore + g1.finalAlignment.getScore() + g2.finalAlignment.getScore());
 	}
 	
-	public static void genFixedPointGraphic(SequencePair sequence, GapFunction gapFunction, ScoringMatrix scoringMatrix, String dir) throws IOException {
+	public static void genFixedPointGraphic(SequencePair sequence, GapFunction gapFunction, ScoringMatrix scoringMatrix, String name) throws IOException {
 		float[][] scores = new float[sequence.getSequenceA().length][sequence.getSequenceB().length];
 		float maxScore = Integer.MIN_VALUE;
 		float minScore = Integer.MAX_VALUE;
@@ -49,13 +50,13 @@ public class FixedPoint extends Alignment{
 			}
 		}
 		float scale = 1 / Math.abs(minScore - maxScore);
-		String path = dir+sequence.getNameA()+"_"+sequence.getNameB()+ "_fp.png";
-		File file = new File(path);
+		File file = new File(name+".png");
 		file.createNewFile();
 		BufferedImage image = new BufferedImage(sequence.getSequenceA().length, sequence.getSequenceB().length, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = image.createGraphics();
 		for (int i = 0; i < scores[0].length; i++) {
 			for (int j = 0; j < scores.length; j++) {
+//				if(color) g.setColor(Color.getHSBColor((scores[j][i] - minScore) * scale, 1, (scores[j][i] - minScore) * scale));
 				g.setColor(Color.getHSBColor(0.66f, 0.96f - (scores[j][i] - minScore) * scale, (scores[j][i] - minScore) * scale));
 				g.drawRect(j, i, 1, 1);
 			}

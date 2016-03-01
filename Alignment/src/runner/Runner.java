@@ -63,6 +63,5 @@ public class Runner {
 		}
 		
 		Output.genOutput(alignments, p.getFormat(), p.getMode());
-
 	}
 }

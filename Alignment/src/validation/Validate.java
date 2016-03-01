@@ -19,20 +19,22 @@ import alignmentUtils.SequencePair;
 
 public class Validate {
 
-//	used to get maximum validation value from tsv file
+	// used to get maximum validation value from tsv file
 	public static void getMax(String path, boolean max) throws IOException {
 		File file = new File(path);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		float i = 0;
 		float j = 0;
 		float val;
-		if(max) val = Integer.MIN_VALUE;
-		else val = Integer.MAX_VALUE;
+		if (max)
+			val = Integer.MIN_VALUE;
+		else
+			val = Integer.MAX_VALUE;
 		String line;
-		while((line = br.readLine()) != null) {
+		while ((line = br.readLine()) != null) {
 			String[] vals = line.split("\t");
 			float tem = Float.parseFloat(vals[2]);
-			if(tem < val) {
+			if (tem < val) {
 				val = tem;
 				i = Float.parseFloat(vals[0]);
 				j = Float.parseFloat(vals[1]);
@@ -41,74 +43,85 @@ public class Validate {
 		br.close();
 		System.out.println(i + " " + j + " " + val);
 	}
-	
-//	used to get statistics for correlation between identity and validation
-	public static void identCorrelations(String path, String out, int type) throws IOException {
+
+	// used to get statistics for correlation between identity and validation
+	public static void identCorrelations(String path, String out, int type)
+			throws IOException {
 		ArrayList<char[]> refs = getRefAlignments(path);
 		File outFile = new File(out);
 		FileWriter fw;
-		for (int i = 0; i < refs.size(); i+=2) {
+		for (int i = 0; i < refs.size(); i += 2) {
 			char[] a = refs.get(i);
-			char[] b = refs.get(i+1);
+			char[] b = refs.get(i + 1);
 			int idC = 0;
 			String identity;
 			for (int j = 0; j < b.length; j++) {
-				if(a[j] == b[j]) idC++;
+				if (a[j] == b[j])
+					idC++;
 			}
 			identity = String.format("%.3f", idC / (float) a.length);
 			Alignment al = new GotohGlobal(
 					new SequencePair(String.valueOf(a).replaceAll("-", ""),
 							String.valueOf(b).replaceAll("-", ""), "", ""),
 					new GapFunction(-20, -4),
-					new ScoringMatrix("/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
+					new ScoringMatrix(
+							"/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
 			al.make();
-			float[] val = calcValidation(a, b, al.getFinalAlignment().getSequenceA(), al.getFinalAlignment().getSequenceB());
+			float[] val = calcValidation(a, b, al.getFinalAlignment()
+					.getSequenceA(), al.getFinalAlignment().getSequenceB());
 			fw = new FileWriter(outFile, true);
 			fw.write(identity + "\t" + String.format("%.3f", val[type]) + "\n");
 			fw.close();
 		}
 	}
-	
-//	used to get statistics for correlation between identity and validation
-	public static void diffCorrelations(String path, String out, int type) throws IOException {
+
+	// used to get statistics for correlation between identity and validation
+	public static void diffCorrelations(String path, String out, int type)
+			throws IOException {
 		ArrayList<char[]> refs = getRefAlignments(path);
 		File outFile = new File(out);
 		FileWriter fw;
-		for (int i = 0; i < refs.size(); i+=2) {
+		for (int i = 0; i < refs.size(); i += 2) {
 			char[] a = refs.get(i);
-			char[] b = refs.get(i+1);
-			int diff = Math.abs(String.valueOf(a).replaceAll("-", "").length() - String.valueOf(b).replaceAll("-", "").length());
+			char[] b = refs.get(i + 1);
+			int diff = Math.abs(String.valueOf(a).replaceAll("-", "").length()
+					- String.valueOf(b).replaceAll("-", "").length());
 			Alignment al = new GotohGlobal(
 					new SequencePair(String.valueOf(a).replaceAll("-", ""),
 							String.valueOf(b).replaceAll("-", ""), "", ""),
 					new GapFunction(-20, -4),
-					new ScoringMatrix("/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
+					new ScoringMatrix(
+							"/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/blosum62.mat"));
 			al.make();
-			float[] val = calcValidation(a, b, al.getFinalAlignment().getSequenceA(), al.getFinalAlignment().getSequenceB());
+			float[] val = calcValidation(a, b, al.getFinalAlignment()
+					.getSequenceA(), al.getFinalAlignment().getSequenceB());
 			fw = new FileWriter(outFile, true);
 			fw.write(diff + "\t" + String.format("%.3f", val[type]) + "\n");
 			fw.close();
 		}
 	}
-	
-//	used to create tsv files for validation statistics
-	public static void formatFile(String path, String out, int i) throws IOException {
+
+	// used to create tsv files for validation statistics
+	public static void formatFile(String path, String out, int i)
+			throws IOException {
 		File file = new File(path);
 		File fileOut = new File(out);
 		FileWriter fw = new FileWriter(fileOut);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String line;
-		while((line = br.readLine()) != null) {
+		while ((line = br.readLine()) != null) {
 			String[] par = line.split(" ");
-		fw.write(String.format("%.1f",Float.parseFloat(par[0])) + "\t");
-		fw.write(String.format("%.1f",Float.parseFloat(par[1])) + "\t");
-		fw.write(String.format("%.4f",Float.parseFloat(par[i])) + "\n");
+			fw.write(String.format("%.1f", Float.parseFloat(par[0])) + "\t");
+			fw.write(String.format("%.1f", Float.parseFloat(par[1])) + "\t");
+			fw.write(String.format("%.4f", Float.parseFloat(par[i])) + "\n");
 		}
 		fw.close();
 	}
-	
-//	used to validate various gap open and gap extend settings against HOMSTRAD databank
-	public static void paramTuning(String path, String mat, String out) throws IOException {
+
+	// used to validate various gap open and gap extend settings against
+	// HOMSTRAD databank
+	public static void paramTuning(String path, String mat, String out)
+			throws IOException {
 		ArrayList<char[]> refs = getRefAlignments(path);
 		float sens = 0;
 		float spec = 0;
@@ -122,12 +135,11 @@ public class Validate {
 				for (int i = 0; i < refs.size(); i += 2) {
 					String seqA = String.valueOf(refs.get(i));
 					String seqB = String.valueOf(refs.get(i + 1));
-					GotohGlobal a = new GotohGlobal(
-							new SequencePair(seqA.replaceAll("-", ""),
-									seqB.replaceAll("-", ""), "", ""),
-							new GapFunction(j2, j),
-							new ScoringMatrix(
-									"/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/" + mat));
+					GotohGlobal a = new GotohGlobal(new SequencePair(
+							seqA.replaceAll("-", ""), seqB.replaceAll("-", ""),
+							"", ""), new GapFunction(j2, j), new ScoringMatrix(
+							"/home/proj/biocluster/praktikum/bioprakt/Data/MATRICES/"
+									+ mat));
 					a.make();
 					float[] vals = calcValidation(refs.get(i), refs.get(i + 1),
 							a.getFinalAlignment().getSequenceA(), a
@@ -139,7 +151,13 @@ public class Validate {
 					imse += vals[4];
 				}
 				fw = new FileWriter(file, true);
-				fw.write(String.format("%.1f",j2) + " " + String.format("%.1f",j) + " " + String.format("%.4f",sens/657) + " " + String.format("%.4f",spec/657) + " " + String.format("%.4f",cov/657) + " " + String.format("%.4f",mse/657) + " " + String.format("%.4f",imse/657) + "\n");
+				fw.write(String.format("%.1f", j2) + " "
+						+ String.format("%.1f", j) + " "
+						+ String.format("%.4f", sens / 657) + " "
+						+ String.format("%.4f", spec / 657) + " "
+						+ String.format("%.4f", cov / 657) + " "
+						+ String.format("%.4f", mse / 657) + " "
+						+ String.format("%.4f", imse / 657) + "\n");
 				fw.close();
 				sens = 0;
 				spec = 0;
@@ -147,10 +165,10 @@ public class Validate {
 				mse = 0;
 				imse = 0;
 			}
-		}		
+		}
 	}
 
-//	validates given file containing reference and candidate alignments
+	// validates given file containing reference and candidate alignments
 	public static void validateFile(String path) throws IOException {
 		File file = new File(path);
 		BufferedReader br = new BufferedReader(new FileReader(file));
@@ -181,7 +199,7 @@ public class Validate {
 		br.close();
 	}
 
-//	takes file and creates list with reference alignments
+	// takes file and creates list with reference alignments
 	public static ArrayList<char[]> getRefAlignments(String path)
 			throws IOException {
 		ArrayList<char[]> out = new ArrayList<char[]>();
@@ -198,7 +216,7 @@ public class Validate {
 		return out;
 	}
 
-//	calculates validation values for given candidate and reference alignment
+	// calculates validation values for given candidate and reference alignment
 	public static float[] calcValidation(char[] aRef, char[] bRef, char[] aPre,
 			char[] bPre) {
 		float[] validateOut = new float[5];
@@ -210,7 +228,7 @@ public class Validate {
 		int tem = 0;
 		int tar = 0;
 		int cov = 0;
-		int invCov = 0;		
+		int invCov = 0;
 		int shift = 0;
 		int invShift = 0;
 		for (int i = 0; i < aRef.length; i++) {
@@ -249,7 +267,7 @@ public class Validate {
 				if (a == b) {
 					aliCor++;
 				} else {
-					
+
 					shift += Math.abs(a - b);
 				}
 			}
@@ -258,12 +276,11 @@ public class Validate {
 			if (invPreMap.containsKey(key)) {
 				invCov++;
 				int a = invPreMap.get(key);
-				int b = invRefMap.get(key);	
-				if(a != b) {
-	
-				invShift += Math.abs(a - b);
+				int b = invRefMap.get(key);
+				if (a != b) {
+					invShift += Math.abs(a - b);
+				}
 			}
-		}
 		}
 		validateOut[0] = aliCor / (float) aliRefTot;
 		validateOut[1] = aliCor / (float) aliPreTot;
@@ -273,19 +290,11 @@ public class Validate {
 		} else {
 			validateOut[3] = shift / (float) cov;
 		}
-		if(invCov == 0) {
+		if (invCov == 0) {
 			validateOut[4] = 0;
-		}else {
+		} else {
 			validateOut[4] = invShift / (float) invCov;
 		}
 		return validateOut;
-	}
-
-	public static void main(String[] args) throws IOException {
-		Locale.setDefault(new Locale("US"));
-//		validateFile(args[1]);
-
-//		paramTuning("/home/b/beckerr/propra/gotoh_testset.txt", "dayhoff.mat", "dayhoff.tsv");
-//		paramTuning("/home/b/beckerr/propra/gotoh_testset.txt", "BlakeCohenMatrix.mat", "cohen.tsv");
-	}
+	}		
 }
